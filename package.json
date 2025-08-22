@@ -10,7 +10,7 @@
     "lint:fix": "prettier --check --write . && eslint . --fix",
     "lint": "prettier --check . && eslint .",
     "prepare": "husky",
-    "swagger": "npx swagger-typescript-api generate -p https://petstore3.swagger.io/api/v3/openapi.json -o ./src/apis/ -n fetchers.ts --axios --extract-query-params --extract-response-body --extract-response-error --extract-request-params"
+    "swagger": "npx swagger-typescript-api generate -p https://lightblue2.store/v3/api-docs -o ./src/apis/ -n fetchers.ts --axios --extract-query-params --extract-response-body --extract-response-error --extract-request-params"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

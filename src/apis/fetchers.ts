@@ -10,175 +10,71 @@
  * ---------------------------------------------------------------
  */
 
-export interface Order {
-  /**
-   * @format int64
-   * @example 10
-   */
+export interface Account {
+  /** @format int64 */
   id?: number
-  /**
-   * @format int64
-   * @example 198772
-   */
-  petId?: number
-  /**
-   * @format int32
-   * @example 7
-   */
-  quantity?: number
-  /** @format date-time */
-  shipDate?: string
-  /**
-   * Order Status
-   * @example "approved"
-   */
-  status?: 'placed' | 'approved' | 'delivered'
-  complete?: boolean
-}
-
-export interface Category {
-  /**
-   * @format int64
-   * @example 1
-   */
-  id?: number
-  /** @example "Dogs" */
-  name?: string
-}
-
-export interface User {
-  /**
-   * @format int64
-   * @example 10
-   */
-  id?: number
-  /** @example "theUser" */
   username?: string
-  /** @example "John" */
-  firstName?: string
-  /** @example "James" */
-  lastName?: string
-  /** @example "john@email.com" */
-  email?: string
-  /** @example "12345" */
   password?: string
-  /** @example "12345" */
-  phone?: string
-  /**
-   * User Status
-   * @format int32
-   * @example 1
-   */
-  userStatus?: number
+  accountType?: string
 }
 
-export interface Tag {
+export interface Artist {
+  /** @format int64 */
+  id?: number
+  account?: Account
+  name?: string
+  portfolios?: Portfolio[]
+}
+
+export interface Portfolio {
+  /** @format int64 */
+  id?: number
+  artist?: Artist
+  url?: string
+}
+
+export interface ArtistDTO {
   /** @format int64 */
   id?: number
   name?: string
+  portfolios?: PortfolioDTO[]
 }
 
-export interface Pet {
-  /**
-   * @format int64
-   * @example 10
-   */
+export interface PortfolioDTO {
+  /** @format int64 */
   id?: number
-  /** @example "doggie" */
-  name: string
-  category?: Category
-  photoUrls: string[]
-  tags?: Tag[]
-  /** pet status in the store */
-  status?: 'available' | 'pending' | 'sold'
+  url?: string
 }
 
-export interface ApiResponse {
-  /** @format int32 */
-  code?: number
-  type?: string
-  message?: string
-}
+export type GetPortfolioByIdData = Portfolio
 
-export type UpdatePetData = Pet
+export type UpdatePortfolioData = Portfolio
 
-export type AddPetData = Pet
+export type DeletePortfolioData = any
 
-export interface FindPetsByStatusParams {
-  /**
-   * Status values that need to be considered for filter
-   * @default "available"
-   */
-  status: 'available' | 'pending' | 'sold'
-}
+export type GetArtistByIdData = ArtistDTO
 
-export type FindPetsByStatusData = Pet[]
+export type UpdateArtistData = Artist
 
-export interface FindPetsByTagsParams {
-  /** Tags to filter by */
-  tags: string[]
-}
+export type DeleteArtistData = any
 
-export type FindPetsByTagsData = Pet[]
+export type UpdatePortfolio1Data = Portfolio
 
-export type GetPetByIdData = Pet
+export type DeletePortfolio1Data = any
 
-export interface UpdatePetWithFormParams {
-  /** Name of pet that needs to be updated */
-  name?: string
-  /** Status of pet that needs to be updated */
-  status?: string
-  /**
-   * ID of pet that needs to be updated
-   * @format int64
-   */
-  petId: number
-}
+export type GetAllPortfoliosData = Portfolio[]
 
-export type UpdatePetWithFormData = Pet
+export type CreatePortfolioData = Portfolio
 
-export type DeletePetData = any
+export type GetAllArtistsData = Artist[]
 
-export interface UploadFileParams {
-  /** Additional Metadata */
-  additionalMetadata?: string
-  /**
-   * ID of pet to update
-   * @format int64
-   */
-  petId: number
-}
+export type CreateArtistData = Artist
 
-export type UploadFileData = ApiResponse
+export type GetPortfoliosByArtistIdData = PortfolioDTO[]
 
-export type GetInventoryData = Record<string, number>
+export type AddPortfolioToArtistData = Portfolio
 
-export type PlaceOrderData = Order
-
-export type GetOrderByIdData = Order
-
-export type DeleteOrderData = any
-
-export type CreateUserData = User
-
-export type CreateUsersWithListInputData = User
-
-export interface LoginUserParams {
-  /** The user name for login */
-  username?: string
-  /** The password for login in clear text */
-  password?: string
-}
-
-export type LoginUserData = string
-
-export type LogoutUserData = any
-
-export type GetUserByNameData = User
-
-export type UpdateUserData = any
-
-export type DeleteUserData = any
+export type HealthData = string
 
 import type {
   AxiosInstance,
@@ -244,7 +140,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || '/api/v3',
+      baseURL: axiosConfig.baseURL || '/',
     })
     this.secure = secure
     this.format = format
@@ -356,371 +252,282 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Swagger Petstore - OpenAPI 3.0
- * @version 1.0.27
- * @license Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.html)
- * @termsOfService https://swagger.io/terms/
- * @baseUrl /api/v3
- * @externalDocs https://swagger.io
- * @contact <apiteam@swagger.io>
+ * @title LightBlue팀 백엔드
+ * @version 1.0.0
+ * @baseUrl /
  *
- * This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
- * Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
- * You can now help us improve the API whether it's by making changes to the definition itself or to the code.
- * That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
- *
- * Some useful links:
- * - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
- * - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+ * LightBlue팀 백엔드 API 명세서
  */
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
-  pet = {
+  /**
+   * No description
+   *
+   * @tags health-controller
+   * @name Health
+   * @request GET:/
+   * @secure
+   */
+  health = (params: RequestParams = {}) =>
+    this.request<HealthData, any>({
+      path: `/`,
+      method: 'GET',
+      secure: true,
+      ...params,
+    })
+
+  api = {
     /**
-     * @description Update an existing pet by Id.
+     * No description
      *
-     * @tags pet
-     * @name UpdatePet
-     * @summary Update an existing pet.
-     * @request PUT:/pet
+     * @tags portfolio-controller
+     * @name GetPortfolioById
+     * @request GET:/api/portfolios/{id}
      * @secure
      */
-    updatePet: (data: Pet, params: RequestParams = {}) =>
-      this.request<UpdatePetData, void>({
-        path: `/pet`,
+    getPortfolioById: (id: number, params: RequestParams = {}) =>
+      this.request<GetPortfolioByIdData, any>({
+        path: `/api/portfolios/${id}`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags portfolio-controller
+     * @name UpdatePortfolio
+     * @request PUT:/api/portfolios/{id}
+     * @secure
+     */
+    updatePortfolio: (
+      id: number,
+      data: Portfolio,
+      params: RequestParams = {}
+    ) =>
+      this.request<UpdatePortfolioData, any>({
+        path: `/api/portfolios/${id}`,
         method: 'PUT',
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
         ...params,
       }),
 
     /**
-     * @description Add a new pet to the store.
+     * No description
      *
-     * @tags pet
-     * @name AddPet
-     * @summary Add a new pet to the store.
-     * @request POST:/pet
+     * @tags portfolio-controller
+     * @name DeletePortfolio
+     * @request DELETE:/api/portfolios/{id}
      * @secure
      */
-    addPet: (data: Pet, params: RequestParams = {}) =>
-      this.request<AddPetData, void>({
-        path: `/pet`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Multiple status values can be provided with comma separated strings.
-     *
-     * @tags pet
-     * @name FindPetsByStatus
-     * @summary Finds Pets by status.
-     * @request GET:/pet/findByStatus
-     * @secure
-     */
-    findPetsByStatus: (
-      query: FindPetsByStatusParams,
-      params: RequestParams = {}
-    ) =>
-      this.request<FindPetsByStatusData, void>({
-        path: `/pet/findByStatus`,
-        method: 'GET',
-        query: query,
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
-     *
-     * @tags pet
-     * @name FindPetsByTags
-     * @summary Finds Pets by tags.
-     * @request GET:/pet/findByTags
-     * @secure
-     */
-    findPetsByTags: (query: FindPetsByTagsParams, params: RequestParams = {}) =>
-      this.request<FindPetsByTagsData, void>({
-        path: `/pet/findByTags`,
-        method: 'GET',
-        query: query,
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Returns a single pet.
-     *
-     * @tags pet
-     * @name GetPetById
-     * @summary Find pet by ID.
-     * @request GET:/pet/{petId}
-     * @secure
-     */
-    getPetById: (petId: number, params: RequestParams = {}) =>
-      this.request<GetPetByIdData, void>({
-        path: `/pet/${petId}`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Updates a pet resource based on the form data.
-     *
-     * @tags pet
-     * @name UpdatePetWithForm
-     * @summary Updates a pet in the store with form data.
-     * @request POST:/pet/{petId}
-     * @secure
-     */
-    updatePetWithForm: (
-      { petId, ...query }: UpdatePetWithFormParams,
-      params: RequestParams = {}
-    ) =>
-      this.request<UpdatePetWithFormData, void>({
-        path: `/pet/${petId}`,
-        method: 'POST',
-        query: query,
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Delete a pet.
-     *
-     * @tags pet
-     * @name DeletePet
-     * @summary Deletes a pet.
-     * @request DELETE:/pet/{petId}
-     * @secure
-     */
-    deletePet: (petId: number, params: RequestParams = {}) =>
-      this.request<DeletePetData, void>({
-        path: `/pet/${petId}`,
+    deletePortfolio: (id: number, params: RequestParams = {}) =>
+      this.request<DeletePortfolioData, any>({
+        path: `/api/portfolios/${id}`,
         method: 'DELETE',
         secure: true,
         ...params,
       }),
 
     /**
-     * @description Upload image of the pet.
+     * No description
      *
-     * @tags pet
-     * @name UploadFile
-     * @summary Uploads an image.
-     * @request POST:/pet/{petId}/uploadImage
+     * @tags artist-controller
+     * @name GetArtistById
+     * @request GET:/api/artists/{id}
      * @secure
      */
-    uploadFile: (
-      { petId, ...query }: UploadFileParams,
-      data: File,
-      params: RequestParams = {}
-    ) =>
-      this.request<UploadFileData, void>({
-        path: `/pet/${petId}/uploadImage`,
-        method: 'POST',
-        query: query,
-        body: data,
+    getArtistById: (id: number, params: RequestParams = {}) =>
+      this.request<GetArtistByIdData, any>({
+        path: `/api/artists/${id}`,
+        method: 'GET',
         secure: true,
-        format: 'json',
         ...params,
       }),
-  }
-  store = {
+
     /**
-     * @description Returns a map of status codes to quantities.
+     * No description
      *
-     * @tags store
-     * @name GetInventory
-     * @summary Returns pet inventories by status.
-     * @request GET:/store/inventory
+     * @tags artist-controller
+     * @name UpdateArtist
+     * @request PUT:/api/artists/{id}
      * @secure
      */
-    getInventory: (params: RequestParams = {}) =>
-      this.request<GetInventoryData, void>({
-        path: `/store/inventory`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Place a new order in the store.
-     *
-     * @tags store
-     * @name PlaceOrder
-     * @summary Place an order for a pet.
-     * @request POST:/store/order
-     */
-    placeOrder: (data: Order, params: RequestParams = {}) =>
-      this.request<PlaceOrderData, void>({
-        path: `/store/order`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
-     *
-     * @tags store
-     * @name GetOrderById
-     * @summary Find purchase order by ID.
-     * @request GET:/store/order/{orderId}
-     */
-    getOrderById: (orderId: number, params: RequestParams = {}) =>
-      this.request<GetOrderByIdData, void>({
-        path: `/store/order/${orderId}`,
-        method: 'GET',
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors.
-     *
-     * @tags store
-     * @name DeleteOrder
-     * @summary Delete purchase order by identifier.
-     * @request DELETE:/store/order/{orderId}
-     */
-    deleteOrder: (orderId: number, params: RequestParams = {}) =>
-      this.request<DeleteOrderData, void>({
-        path: `/store/order/${orderId}`,
-        method: 'DELETE',
-        ...params,
-      }),
-  }
-  user = {
-    /**
-     * @description This can only be done by the logged in user.
-     *
-     * @tags user
-     * @name CreateUser
-     * @summary Create user.
-     * @request POST:/user
-     */
-    createUser: (data: User, params: RequestParams = {}) =>
-      this.request<CreateUserData, void>({
-        path: `/user`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Creates list of users with given input array.
-     *
-     * @tags user
-     * @name CreateUsersWithListInput
-     * @summary Creates list of users with given input array.
-     * @request POST:/user/createWithList
-     */
-    createUsersWithListInput: (data: User[], params: RequestParams = {}) =>
-      this.request<CreateUsersWithListInputData, void>({
-        path: `/user/createWithList`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Log into the system.
-     *
-     * @tags user
-     * @name LoginUser
-     * @summary Logs user into the system.
-     * @request GET:/user/login
-     */
-    loginUser: (query: LoginUserParams, params: RequestParams = {}) =>
-      this.request<LoginUserData, void>({
-        path: `/user/login`,
-        method: 'GET',
-        query: query,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description Log user out of the system.
-     *
-     * @tags user
-     * @name LogoutUser
-     * @summary Logs out current logged in user session.
-     * @request GET:/user/logout
-     */
-    logoutUser: (params: RequestParams = {}) =>
-      this.request<LogoutUserData, void>({
-        path: `/user/logout`,
-        method: 'GET',
-        ...params,
-      }),
-
-    /**
-     * @description Get user detail based on username.
-     *
-     * @tags user
-     * @name GetUserByName
-     * @summary Get user by user name.
-     * @request GET:/user/{username}
-     */
-    getUserByName: (username: string, params: RequestParams = {}) =>
-      this.request<GetUserByNameData, void>({
-        path: `/user/${username}`,
-        method: 'GET',
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description This can only be done by the logged in user.
-     *
-     * @tags user
-     * @name UpdateUser
-     * @summary Update user resource.
-     * @request PUT:/user/{username}
-     */
-    updateUser: (username: string, data: User, params: RequestParams = {}) =>
-      this.request<UpdateUserData, void>({
-        path: `/user/${username}`,
+    updateArtist: (id: number, data: Artist, params: RequestParams = {}) =>
+      this.request<UpdateArtistData, any>({
+        path: `/api/artists/${id}`,
         method: 'PUT',
         body: data,
+        secure: true,
         type: ContentType.Json,
         ...params,
       }),
 
     /**
-     * @description This can only be done by the logged in user.
+     * No description
      *
-     * @tags user
-     * @name DeleteUser
-     * @summary Delete user resource.
-     * @request DELETE:/user/{username}
+     * @tags artist-controller
+     * @name DeleteArtist
+     * @request DELETE:/api/artists/{id}
+     * @secure
      */
-    deleteUser: (username: string, params: RequestParams = {}) =>
-      this.request<DeleteUserData, void>({
-        path: `/user/${username}`,
+    deleteArtist: (id: number, params: RequestParams = {}) =>
+      this.request<DeleteArtistData, any>({
+        path: `/api/artists/${id}`,
         method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags artist-controller
+     * @name UpdatePortfolio1
+     * @request PUT:/api/artists/{artistId}/portfolios/{portfolioId}
+     * @secure
+     */
+    updatePortfolio1: (
+      artistId: number,
+      portfolioId: number,
+      data: Portfolio,
+      params: RequestParams = {}
+    ) =>
+      this.request<UpdatePortfolio1Data, any>({
+        path: `/api/artists/${artistId}/portfolios/${portfolioId}`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags artist-controller
+     * @name DeletePortfolio1
+     * @request DELETE:/api/artists/{artistId}/portfolios/{portfolioId}
+     * @secure
+     */
+    deletePortfolio1: (
+      artistId: number,
+      portfolioId: number,
+      params: RequestParams = {}
+    ) =>
+      this.request<DeletePortfolio1Data, any>({
+        path: `/api/artists/${artistId}/portfolios/${portfolioId}`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags portfolio-controller
+     * @name GetAllPortfolios
+     * @request GET:/api/portfolios
+     * @secure
+     */
+    getAllPortfolios: (params: RequestParams = {}) =>
+      this.request<GetAllPortfoliosData, any>({
+        path: `/api/portfolios`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags portfolio-controller
+     * @name CreatePortfolio
+     * @request POST:/api/portfolios
+     * @secure
+     */
+    createPortfolio: (data: Portfolio, params: RequestParams = {}) =>
+      this.request<CreatePortfolioData, any>({
+        path: `/api/portfolios`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags artist-controller
+     * @name GetAllArtists
+     * @request GET:/api/artists
+     * @secure
+     */
+    getAllArtists: (params: RequestParams = {}) =>
+      this.request<GetAllArtistsData, any>({
+        path: `/api/artists`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags artist-controller
+     * @name CreateArtist
+     * @request POST:/api/artists
+     * @secure
+     */
+    createArtist: (data: Artist, params: RequestParams = {}) =>
+      this.request<CreateArtistData, any>({
+        path: `/api/artists`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags artist-controller
+     * @name GetPortfoliosByArtistId
+     * @request GET:/api/artists/{artistId}/portfolios
+     * @secure
+     */
+    getPortfoliosByArtistId: (artistId: number, params: RequestParams = {}) =>
+      this.request<GetPortfoliosByArtistIdData, any>({
+        path: `/api/artists/${artistId}/portfolios`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags artist-controller
+     * @name AddPortfolioToArtist
+     * @request POST:/api/artists/{artistId}/portfolios
+     * @secure
+     */
+    addPortfolioToArtist: (
+      artistId: number,
+      data: Portfolio,
+      params: RequestParams = {}
+    ) =>
+      this.request<AddPortfolioToArtistData, any>({
+        path: `/api/artists/${artistId}/portfolios`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
   }
