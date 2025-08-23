@@ -1,17 +1,13 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import ReactQueryProvider from '@/providers/ReactQueryProvider'
 import { CounterStoreProvider } from '@/providers/CounterStoreProvider'
+import localFont from 'next/font/local'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+const Pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  variable: '--typography-primitive-font-family-pretendard',
 })
 
 export const metadata: Metadata = {
@@ -26,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${Pretendard.className}`}>
         <ReactQueryProvider>
           <CounterStoreProvider>{children}</CounterStoreProvider>
         </ReactQueryProvider>
