@@ -10,7 +10,8 @@
     "lint:fix": "prettier --check --write . && eslint . --fix",
     "lint": "prettier --check . && eslint .",
     "prepare": "husky",
-    "swagger": "npx swagger-typescript-api generate -p https://lightblue2.store/v3/api-docs -o ./src/apis/ -n fetchers.ts --axios --extract-query-params --extract-response-body --extract-response-error --extract-request-params"
+    "swagger": "npx swagger-typescript-api generate -p https://lightblue2.store/v3/api-docs -o ./src/apis/ -n fetchers.ts --axios --extract-query-params --extract-response-body --extract-response-error --extract-request-params",
+    "generate-design-token": "designex build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -62,6 +63,7 @@
     "react-resizable-panels": "^3.0.4",
     "recharts": "2.15.4",
     "sonner": "^2.0.7",
+    "style-dictionary": "^5.0.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12",
     "vaul": "^1.1.2",
@@ -70,6 +72,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@netoum/designex": "^1.0.2",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20",
     "@types/react": "^19",
