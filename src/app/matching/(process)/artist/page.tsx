@@ -3,13 +3,14 @@ import { useModal } from '@/components/shadcn/modal'
 import { ProgressBar } from '@/components/ProgressBar'
 import { SelectListModal } from '@/components/modal/SelectListModal'
 import {
-  BUDGET_RANGES,
   CITIES,
+  PORTFOLIO_EXISTENCE,
   PROJECT_DURATION,
   PROJECT_TYPES,
+  YEARS_OF_CARRIER,
 } from '@/consts'
 import { ResponseProps } from '@/components/chat/Response'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Flex } from '@/components/flex'
 import { Chat } from '@/components/chat/Chat'
 import { isEqual, isNil } from 'lodash-es'
@@ -47,14 +48,14 @@ export default function Page() {
         },
       },
       {
-        text: '협업유형을 선택해주세요.',
+        text: '원하시는 경력을 선택해주세요.',
         buttonProps: {
           onClick: () =>
             modal
               .open({
                 component: () => (
                   <SelectListModal
-                    options={PROJECT_TYPES}
+                    options={YEARS_OF_CARRIER}
                     title='협업 유형'
                     className='h-[300px]'
                   />
@@ -63,67 +64,43 @@ export default function Page() {
               .then(res => {
                 return {
                   label:
-                    PROJECT_TYPES.find(item => isEqual(item.value, res.value))
-                      ?.label ?? '',
-                  value: res.value,
-                }
-              }),
-          buttonText: '협업유형 선택하기',
-        },
-      },
-      {
-        text: '예산범위를 선택해주세요.',
-        buttonProps: {
-          onClick: () =>
-            modal
-              .open({
-                component: () => (
-                  <SelectListModal
-                    options={BUDGET_RANGES}
-                    title='예산 범위'
-                    className='h-[230px]'
-                  />
-                ),
-              })
-              .then(res => {
-                return {
-                  label:
-                    BUDGET_RANGES.find(item => isEqual(item.value, res.value))
-                      ?.label ?? '',
-                  value: res.value,
-                }
-              }),
-          buttonText: '예산범위 선택하기',
-        },
-      },
-      {
-        text: '프로젝트 기간을 선택해주세요.',
-        buttonProps: {
-          onClick: () =>
-            modal
-              .open({
-                component: () => (
-                  <SelectListModal
-                    options={PROJECT_DURATION}
-                    title='프로젝트 기간'
-                    className='h-[192px]'
-                  />
-                ),
-              })
-              .then(res => {
-                return {
-                  label:
-                    PROJECT_DURATION.find(item =>
+                    YEARS_OF_CARRIER.find(item =>
                       isEqual(item.value, res.value)
                     )?.label ?? '',
                   value: res.value,
                 }
               }),
-          buttonText: '프로젝트 기간 선택하기',
+          buttonText: '경력 선택하기',
         },
       },
       {
-        text: '지금부터 프로젝트 매칭을 시작하겠습니다.',
+        text: '포트폴리오 유무를 선택해주세요.',
+        buttonProps: {
+          onClick: () =>
+            modal
+              .open({
+                component: () => (
+                  <SelectListModal
+                    options={PORTFOLIO_EXISTENCE}
+                    title='포트폴리오 유무'
+                    className='h-[120px]'
+                  />
+                ),
+              })
+              .then(res => {
+                return {
+                  label:
+                    PORTFOLIO_EXISTENCE.find(item =>
+                      isEqual(item.value, res.value)
+                    )?.label ?? '',
+                  value: res.value,
+                }
+              }),
+          buttonText: '포트폴리오 유무 선택하기',
+        },
+      },
+      {
+        text: '지금부터 예술가 매칭을 시작하겠습니다.',
       },
     ],
     []
@@ -143,9 +120,9 @@ export default function Page() {
       </Flex>
       <Chat
         responses={responses}
-        onProcess={useCallback(responses => {
+        onProcess={responses => {
           setCurrentResponses(responses.map(item => item.value))
-        }, [])}></Chat>
+        }}></Chat>
       {modalCtx}
     </>
   )
