@@ -6,16 +6,16 @@ import Footer from '@/components/footer'
 export default function Home() {
   return (
     <div className='h-full flex flex-col'>
-      <main className='min-h-[calc(100vh-197px)] flex-1 flex items-center justify-center relative overflow-hidden'>
+      <main className='min-h-[calc(100vh-197px)] flex-1 flex items-center justify-center relative '>
         <div
           className='absolute inset-0 bg-cover bg-center bg-no-repeat'
           style={{
             backgroundImage: "url('/background.svg')",
           }}></div>
-        <div className='relative z-10  space-y-4 text-center px-6 max-w-4xl mx-auto'>
+        <div className='z-10 space-y-4 text-center px-6 max-w-4xl mx-auto'>
           <Badge
             variant='secondary'
-            className='body-1 text-md px-m h-12 line-height-180% w-[92px] bg-transparent backdrop-blur-sm text-semantic-brand-primary border-semantic-brand-primary rounded-full border  '>
+            className='body-1 text-md px-m h-12 !leading-[1.8] w-[92px] bg-transparent backdrop-blur-sm text-semantic-brand-primary border-semantic-brand-primary rounded-full border  '>
             ABOUT
           </Badge>
 

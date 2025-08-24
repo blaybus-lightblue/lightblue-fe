@@ -21,7 +21,7 @@ export default function Footer() {
     },
   ]
   return (
-    <footer className='h-[116px] bg-primitive-color-alpha-neutral-dark-90 text-white  px-6'>
+    <footer className='h-[116px] w-full bg-primitive-color-alpha-neutral-dark-90 text-white  px-6'>
       <div className='max-w-[1200px] mx-auto h-full flex items-center justify-between'>
         <div className='flex flex-wrap gap-8 text-sm text-text-300'>
           {menuItems.map(item => (
