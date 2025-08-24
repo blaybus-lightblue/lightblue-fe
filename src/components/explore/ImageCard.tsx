@@ -1,29 +1,27 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import { Card, CardContent } from '@/components/shadcn/card'
 import Image from 'next/image'
 
-type ArtistCardProps = {
+type Props = {
+  id: string | number
+  kind: 'artist' | 'project'
+
   title: string
   subtitle: string
   imageSrc?: string
 }
 
-export const ImageCard = ({ title, subtitle, imageSrc }: ArtistCardProps) => {
-  const handleClickArtist = () => {
-    console.log('artist click:', title)
-  }
+export const ImageCard = ({ id, kind, title, subtitle, imageSrc }: Props) => {
+  const href = `/detail/${kind}/${id}`
 
   return (
-    <div className='flex flex-col items-center gap-2'>
+    <Link href={href} className='block'>
       <Card
-        onClick={handleClickArtist}
-        role='button'
+        role='link'
         tabIndex={0}
-        onKeyDown={e =>
-          (e.key === 'Enter' || e.key === ' ') && handleClickArtist()
-        }
         className='relative w-75 aspect-[346/244] overflow-hidden rounded-2xl cursor-pointer'>
         <div className='absolute inset-0 group overflow-hidden'>
           {imageSrc ? (
@@ -35,7 +33,7 @@ export const ImageCard = ({ title, subtitle, imageSrc }: ArtistCardProps) => {
               priority
             />
           ) : (
-            <div className='w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 transition-transform duration-300 group-hover:scale-105' />
+            <div className='w-full h-full bg-gray-200' />
           )}
           <div className='absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20' />
         </div>
@@ -49,6 +47,6 @@ export const ImageCard = ({ title, subtitle, imageSrc }: ArtistCardProps) => {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </Link>
   )
 }
