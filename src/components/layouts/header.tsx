@@ -18,7 +18,7 @@ export default function Header() {
   const menuItems = [
     { label: 'ARTIST & PROJECT', href: '/matching' },
     { label: '엔터프라이즈(기업용)', href: '/company' },
-    { label: '예술가 전환', href: '' },
+    { label: '예술가 전환', href: '/artist/profile/setup' },
   ]
 
   const iconItems = [
@@ -34,7 +34,7 @@ export default function Header() {
           <Image src='/logo.svg' alt='logo' width={120} height={48} />
         </Link>
 
-        <nav className='flex items-center space-x-8'>
+        <nav className='flex items-center gap-8 mr-'>
           {menuItems.map(item => (
             <Link
               key={item.label}
@@ -45,14 +45,8 @@ export default function Header() {
           ))}
 
           {isLogin ? (
-            <div className='flex items-center space-x-4'>
-              <Link
-                href='/artist/profile/setup'
-                className='text-gray-900 font-medium transition-colors'>
-                예술가 전환
-              </Link>
-
-              <div className='ml-12 flex items-center space-x-4'>
+            <div className='flex items-center space-x-4 ml-2'>
+              <div className='flex items-center space-x-4'>
                 {iconItems.map(item => (
                   <button
                     key={item.name}
