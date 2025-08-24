@@ -142,7 +142,7 @@ export default function Page() {
   useEffect(() => {
     if (!isNil(data?.data.result?.content) && isSuccess) {
       setResult(data.data.result.content)
-      router.push('/artist/result')
+      router.push('/matching/artist/result')
     }
   }, [isSuccess, router, data, setResult])
 
