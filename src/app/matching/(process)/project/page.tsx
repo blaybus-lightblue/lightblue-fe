@@ -15,13 +15,24 @@ import { Flex } from '@/components/flex'
 import { Chat } from '@/components/chat/Chat'
 import { isEqual, isNil } from 'lodash-es'
 import { LoadingMatching } from '@/components/matching/LoadingMatching'
+import { useProjectStore } from '@/providers/ProjectMatchingResultProvider'
+import { useMatchProject } from '@/apis/project.queries'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
+  const router = useRouter()
   const [modal, modalCtx] = useModal()
+  const { setResult } = useProjectStore(state => state)
   const [currentResponses, setCurrentResponses] = useState<
     SelectOption['value'][]
   >([])
   const [isMatching, setIsMatching] = useState(false)
+  const { data, isSuccess } = useMatchProject(
+    currentResponses?.[0],
+    currentResponses?.[1],
+    currentResponses?.[2],
+    { enabled: isMatching }
+  )
 
   const responses: ResponseProps[] = useMemo(
     () => [
@@ -129,7 +140,7 @@ export default function Page() {
         text: '지금부터 프로젝트 매칭을 시작하겠습니다.',
       },
     ],
-    []
+    [modal]
   )
 
   const percentage = Math.round(
@@ -137,6 +148,13 @@ export default function Page() {
       responses.filter(item => !isNil(item.buttonProps)).length) *
       100
   )
+
+  useEffect(() => {
+    if (!isNil(data?.result) && isSuccess) {
+      setResult(data.result)
+      router.push('/artist/result')
+    }
+  }, [isSuccess, router, data, setResult])
 
   const onProcess = useCallback((responses: SelectOption[]) => {
     setCurrentResponses(responses.map(item => item.value))

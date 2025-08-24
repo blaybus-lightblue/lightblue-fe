@@ -1,27 +1,47 @@
+import { AxiosResponse } from 'axios'
 import {
+  ApiResponsePageArtistDTO,
   ArtistCreateRequest,
-  ArtistDTO,
   ArtistUpdateRequest,
   RequestParams,
   SearchArtistsParams,
 } from './fetchers'
 import { api } from './http'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from '@tanstack/react-query'
 
 const queryKeys = {
   all: ['artist'] as const,
 
-  searchArtists: (query?: SearchArtistsParams, params?: RequestParams) =>
-    [...queryKeys.all, query, params] as const,
+  searchArtists: (
+    query: Omit<SearchArtistsParams, 'pageable'>,
+    params?: RequestParams
+  ) => [...queryKeys.all, query, params] as const,
 
   getArtistById: (id: number, query?: RequestParams) =>
     [...queryKeys.all, id, query] as const,
 }
 
 export const queryOptions = {
-  getAllArtists: (query: SearchArtistsParams, params?: RequestParams) => ({
+  getAllArtists: (
+    query: Omit<SearchArtistsParams, 'pageable'>,
+    params?: RequestParams,
+    options?: Omit<
+      UseQueryOptions<AxiosResponse<ApiResponsePageArtistDTO>>,
+      'queryKey' | 'queryFn'
+    >
+  ) => ({
     queryKey: queryKeys.searchArtists(query, params),
-    queryFn: () => api.searchArtists(query, params),
+    queryFn: () =>
+      api.searchArtists(
+        { ...query, page: 0, size: 999 } as unknown as SearchArtistsParams,
+        params
+      ),
+    ...options,
   }),
 
   getArtistById: (id: number, params?: RequestParams) => ({
@@ -50,10 +70,14 @@ export const queryOptions = {
 }
 
 export function useGetAllArtists(
-  query: SearchArtistsParams,
-  params?: RequestParams
+  query: Omit<SearchArtistsParams, 'pageable'>,
+  params?: RequestParams,
+  options?: Omit<
+    UseQueryOptions<AxiosResponse<ApiResponsePageArtistDTO>>,
+    'queryKey' | 'queryFn'
+  >
 ) {
-  return useQuery(queryOptions.getAllArtists(query, params))
+  return useQuery(queryOptions.getAllArtists(query, params, options))
 }
 
 export function useGetArtistById(id: number, params?: RequestParams) {

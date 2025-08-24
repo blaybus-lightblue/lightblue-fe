@@ -3,10 +3,11 @@ import { useModal } from '@/components/shadcn/modal'
 import { ProgressBar } from '@/components/ProgressBar'
 import { SelectListModal } from '@/components/modal/SelectListModal'
 import {
+  BUDGET_RANGES,
   CITIES,
   MATCHING_FINISH_DELAY,
-  PORTFOLIO_EXISTENCE,
-  YEARS_OF_CARRIER,
+  PROJECT_DURATION,
+  PROJECT_TYPES,
 } from '@/consts'
 import { ResponseProps } from '@/components/chat/Response'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -14,28 +15,13 @@ import { Flex } from '@/components/flex'
 import { Chat } from '@/components/chat/Chat'
 import { isEqual, isNil } from 'lodash-es'
 import { LoadingMatching } from '@/components/matching/LoadingMatching'
-import { useGetAllArtists } from '@/apis/artist.queries'
-import { useRouter } from 'next/navigation'
-import { useArtistStore } from '@/providers/ArtistMatchingResultProvider'
 
 export default function Page() {
-  const router = useRouter()
   const [modal, modalCtx] = useModal()
-  const { setResult } = useArtistStore(state => state)
   const [currentResponses, setCurrentResponses] = useState<
     SelectOption['value'][]
   >([])
   const [isMatching, setIsMatching] = useState(false)
-
-  const { data, isSuccess } = useGetAllArtists(
-    {
-      activityArea: currentResponses?.[0],
-      hasPortfolios: currentResponses?.[2],
-      career: currentResponses?.[1],
-    },
-    undefined,
-    { enabled: isMatching }
-  )
 
   const responses: ResponseProps[] = useMemo(
     () => [
@@ -64,14 +50,14 @@ export default function Page() {
         },
       },
       {
-        text: '원하시는 경력을 선택해주세요.',
+        text: '협업유형을 선택해주세요.',
         buttonProps: {
           onClick: () =>
             modal
               .open({
                 component: () => (
                   <SelectListModal
-                    options={YEARS_OF_CARRIER}
+                    options={PROJECT_TYPES}
                     title='협업 유형'
                     className='h-[300px]'
                   />
@@ -80,46 +66,70 @@ export default function Page() {
               .then(res => {
                 return {
                   label:
-                    YEARS_OF_CARRIER.find(item =>
-                      isEqual(item.value, res.value)
-                    )?.label ?? '',
+                    PROJECT_TYPES.find(item => isEqual(item.value, res.value))
+                      ?.label ?? '',
                   value: res.value,
                 }
               }),
-          buttonText: '경력 선택하기',
+          buttonText: '협업유형 선택하기',
         },
       },
       {
-        text: '포트폴리오 유무를 선택해주세요.',
+        text: '예산범위를 선택해주세요.',
         buttonProps: {
           onClick: () =>
             modal
               .open({
                 component: () => (
                   <SelectListModal
-                    options={PORTFOLIO_EXISTENCE}
-                    title='포트폴리오 유무'
-                    className='h-[120px]'
+                    options={BUDGET_RANGES}
+                    title='예산 범위'
+                    className='h-[230px]'
                   />
                 ),
               })
               .then(res => {
                 return {
                   label:
-                    PORTFOLIO_EXISTENCE.find(item =>
+                    BUDGET_RANGES.find(item => isEqual(item.value, res.value))
+                      ?.label ?? '',
+                  value: res.value,
+                }
+              }),
+          buttonText: '예산범위 선택하기',
+        },
+      },
+      {
+        text: '프로젝트 기간을 선택해주세요.',
+        buttonProps: {
+          onClick: () =>
+            modal
+              .open({
+                component: () => (
+                  <SelectListModal
+                    options={PROJECT_DURATION}
+                    title='프로젝트 기간'
+                    className='h-[192px]'
+                  />
+                ),
+              })
+              .then(res => {
+                return {
+                  label:
+                    PROJECT_DURATION.find(item =>
                       isEqual(item.value, res.value)
                     )?.label ?? '',
                   value: res.value,
                 }
               }),
-          buttonText: '포트폴리오 유무 선택하기',
+          buttonText: '프로젝트 기간 선택하기',
         },
       },
       {
-        text: '지금부터 예술가 매칭을 시작하겠습니다.',
+        text: '지금부터 프로젝트 매칭을 시작하겠습니다.',
       },
     ],
-    [modal]
+    []
   )
 
   const percentage = Math.round(
@@ -127,6 +137,10 @@ export default function Page() {
       responses.filter(item => !isNil(item.buttonProps)).length) *
       100
   )
+
+  const onProcess = useCallback((responses: SelectOption[]) => {
+    setCurrentResponses(responses.map(item => item.value))
+  }, [])
 
   useEffect(() => {
     if (
@@ -138,17 +152,6 @@ export default function Page() {
       }, MATCHING_FINISH_DELAY)
     }
   }, [currentResponses, responses])
-
-  useEffect(() => {
-    if (!isNil(data?.data.result?.content) && isSuccess) {
-      setResult(data.data.result.content)
-      router.push('/artist/result')
-    }
-  }, [isSuccess, router, data, setResult])
-
-  const onProcess = useCallback((responses: SelectOption[]) => {
-    setCurrentResponses(responses.map(item => item.value))
-  }, [])
 
   return (
     <>
