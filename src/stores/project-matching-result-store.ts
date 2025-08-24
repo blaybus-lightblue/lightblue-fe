@@ -25,6 +25,7 @@ export const createProjectMatchingResultStore = (
 ) => {
   return createStore<ProjectMatchingResultStore>()(set => ({
     ...initState,
-    setResult: () => set(state => ({ result: state.result })),
+    setResult: (value: ProjectDTO[]) =>
+      set(state => ({ ...state, result: value })),
   }))
 }
