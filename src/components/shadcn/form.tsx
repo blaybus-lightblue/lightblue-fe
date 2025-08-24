@@ -1,22 +1,53 @@
 'use client'
 
-import * as React from 'react'
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
+import { cn } from '@/lib/utils'
+import * as React from 'react'
 import {
   Controller,
+  ControllerProps,
+  FieldErrors,
+  FieldPath,
+  FieldValues,
   FormProvider,
+  SubmitHandler,
   useFormContext,
-  useFormState,
-  type ControllerProps,
-  type FieldPath,
-  type FieldValues,
+  UseFormReturn,
 } from 'react-hook-form'
 
-import { cn } from '@/lib/utils'
-import { Label } from '@/components/shadcn/label'
+import { Label } from './label'
 
-const Form = FormProvider
+interface FormProps<T extends FieldValues> {
+  id?: string
+  form: UseFormReturn<T>
+  className?: string
+  onSubmit?: (values: T) => void | Promise<void>
+  onError?: (errors: FieldErrors<T>) => void
+}
+
+const Form = <T extends FieldValues>({
+  id,
+  className,
+  form,
+  onSubmit,
+  onError,
+  children,
+}: React.PropsWithChildren<FormProps<T>>) => {
+  const handleSubmit: SubmitHandler<T> = data => {
+    onSubmit?.(data)
+  }
+  return (
+    <FormProvider<T> {...form}>
+      <form
+        id={id}
+        className={cn('flex flex-col gap-4 text-left ', className)}
+        onSubmit={form.handleSubmit(handleSubmit, onError)}>
+        {children}
+      </form>
+    </FormProvider>
+  )
+}
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -45,8 +76,8 @@ const FormField = <
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
   const itemContext = React.useContext(FormItemContext)
-  const { getFieldState } = useFormContext()
-  const formState = useFormState({ name: fieldContext.name })
+  const { getFieldState, formState } = useFormContext()
+
   const fieldState = getFieldState(fieldContext.name, formState)
 
   if (!fieldContext) {
@@ -73,34 +104,91 @@ const FormItemContext = React.createContext<FormItemContextValue>(
   {} as FormItemContextValue
 )
 
-function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
+function FormControllerItem({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
   const id = React.useId()
 
   return (
     <FormItemContext.Provider value={{ id }}>
       <div
         data-slot='form-item'
-        className={cn('grid gap-2', className)}
+        className={cn('grid gap-1 mb-0', className)}
         {...props}
       />
     </FormItemContext.Provider>
   )
 }
 
+const FormItem = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  className,
+  label,
+  children,
+  required = false,
+  ...props
+}: React.PropsWithChildren<
+  Omit<ControllerProps<TFieldValues, TName>, 'render'> & {
+    label?: string | React.ReactNode
+    className?: string
+    required?: boolean
+  }
+>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller
+        {...props}
+        render={options => {
+          const { field, fieldState } = options
+          const { error } = fieldState
+          const slotProps = { ...field, 'data-error': error ? true : undefined }
+          return (
+            <FormControllerItem className={className}>
+              {label && (
+                <FormLabel required={required}>
+                  {label}
+                  {required && (
+                    <span className='ml-[2px] text-body-02-sb text-red-500'>
+                      *
+                    </span>
+                  )}
+                </FormLabel>
+              )}
+              <Slot {...slotProps}>{children}</Slot>
+              <FormMessage />
+            </FormControllerItem>
+          )
+        }}
+      />
+    </FormFieldContext.Provider>
+  )
+}
+
 function FormLabel({
   className,
+  children,
+  required,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+}: React.ComponentProps<typeof LabelPrimitive.Root> & {
+  required?: boolean
+}) {
   const { error, formItemId } = useFormField()
 
   return (
     <Label
       data-slot='form-label'
       data-error={!!error}
-      className={cn('data-[error=true]:text-destructive', className)}
+      className={cn(
+        'label-s text-neutral-800 data-[error=true]:text-destructive',
+        className
+      )}
       htmlFor={formItemId}
-      {...props}
-    />
+      {...props}>
+      {children}
+    </Label>
   )
 }
 
@@ -160,6 +248,7 @@ export {
   FormItem,
   FormLabel,
   FormControl,
+  FormControllerItem,
   FormDescription,
   FormMessage,
   FormField,

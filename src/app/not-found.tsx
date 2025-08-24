@@ -1,12 +1,15 @@
-import Link from 'next/link'
+'use client'
+
+import Footer from '@/components/layouts/footer'
 import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
-import Footer from '@/components/footer'
+import { useRouter } from 'next/navigation'
 
 export default function NotFound() {
+  const router = useRouter()
   return (
     <div className='h-full flex flex-col'>
-      <div className='min-h-[calc(100vh-197px)]  space-y-4 flex flex-col items-center justify-center relative overflow-hidden'>
+      <div className='h-full flex-1 space-y-4 flex flex-col items-center justify-center relative overflow-hidden'>
         <div className='relative inline-block'>
           <Image src='/icons/404.svg' alt='404' width={160} height={161} />
         </div>
@@ -23,8 +26,9 @@ export default function NotFound() {
         <Button
           size='lg'
           variant='outline'
+          onClick={() => router.push('/')}
           className='font-bold mt-8 button-1  hover:text-semantic-cta-cta w-[173px] h-14 cursor-pointer  text-semantic-cta-cta border-semantic-cta-cta text-md rounded-lg transition-all duration-200 '>
-          <Link href='/'>홈으로</Link>
+          홈으로
         </Button>
       </div>
       <Footer />

@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
-import Footer from '@/components/footer'
+import Footer from '@/components/layouts/footer'
 
 export default function Home() {
   return (
     <div className='h-full flex flex-col'>
-      <main className='min-h-[calc(100vh-197px)] flex-1 flex items-center justify-center relative '>
+      <main className='h-full flex-1 flex items-center justify-center relative '>
         <div
           className='absolute inset-0 bg-cover bg-center bg-no-repeat'
           style={{
@@ -30,7 +30,7 @@ export default function Home() {
 
           <Button
             size='lg'
-            className='cursor-pointer hover:bg-semantic-cta-cta h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
+            className='cursor-pointer  h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
             <Link href='/matching'>시작하기</Link>
           </Button>
         </div>
