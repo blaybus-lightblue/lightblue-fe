@@ -15,18 +15,11 @@ import {
   CommandList,
 } from '@/components/shadcn/command'
 import { cn } from '@/lib/utils'
-
-export const filterOptions = [
-  { value: 'all', label: '전체' },
-  { value: 'artist', label: '아티스트' },
-  { value: 'project', label: '프로젝트' },
-] as const
-
-export type FilterValue = (typeof filterOptions)[number]['value']
+import { CATEGORY_OPTIONS, CategoryValue } from '@/consts'
 
 type FilterComboBoxProps = {
-  value?: FilterValue
-  onChange?: (val: FilterValue) => void
+  value?: CategoryValue
+  onChange?: (val: CategoryValue) => void
   placeholder?: string
   className?: string
 }
@@ -38,7 +31,7 @@ export function FilterComboBox({
   className,
 }: FilterComboBoxProps) {
   const [open, setOpen] = React.useState(false)
-  const selected = filterOptions.find(o => o.value === value)
+  const selected = CATEGORY_OPTIONS.find(o => o.value === value)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -48,7 +41,7 @@ export function FilterComboBox({
           role='combobox'
           aria-expanded={open}
           className={cn(
-            'h-9 w-[120px] justify-between rounded-sm',
+            'h-9 w-[160px] justify-between rounded-sm',
             'transition-colors hover:border-gray-300 text-gray-600',
             className
           )}>
@@ -60,16 +53,16 @@ export function FilterComboBox({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className='w-[120px] p-0'>
+      <PopoverContent className='w-[200px] p-0'>
         <Command>
           <CommandList>
             <CommandGroup>
-              {filterOptions.map(o => (
+              {CATEGORY_OPTIONS.map(o => (
                 <CommandItem
                   key={o.value}
                   value={o.value}
                   onSelect={v => {
-                    onChange?.(v as FilterValue)
+                    onChange?.(v as CategoryValue)
                     setOpen(false)
                   }}>
                   {o.label}

@@ -26,7 +26,7 @@ export function SearchInput({
   }
 
   return (
-    <div className={`relative w-full rounded-sm ${className}`}>
+    <div className={`relative w-full rounded-sm ${className} bg-white`}>
       <Search className='pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400' />
       <Input
         value={value}
