@@ -1,45 +1,46 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { AuthActions } from '@/apis/auth.actions'
 
 interface AuthContextType {
-  isLoggedIn: boolean
-  userName: string | null
-  login: (name: string) => void
-  logout: () => void
+  isLogin: boolean
+  token: string | null
+  loading: boolean
+  checkAuth: () => void
 }
-// TODO: 로그인 api 연결 후 수정 필요
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [isLogin, setIsLogin] = useState(false)
+  const [token, setToken] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-interface AuthProviderProps {
-  children: ReactNode
-}
+  const checkAuth = () => {
+    const currentToken = AuthActions.getToken()
+    const authStatus = AuthActions.isLogin()
 
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userName, setUserName] = useState<string | null>(null)
-
-  const login = (name: string) => {
-    setIsLoggedIn(true)
-    setUserName(name)
+    setToken(currentToken)
+    setIsLogin(authStatus)
+    setLoading(false)
   }
 
-  const logout = () => {
-    setIsLoggedIn(false)
-    setUserName(null)
-  }
+  useEffect(() => {
+    checkAuth()
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userName, login, logout }}>
+    <AuthContext.Provider value={{ isLogin, token, loading, checkAuth }}>
       {children}
     </AuthContext.Provider>
   )
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
 }

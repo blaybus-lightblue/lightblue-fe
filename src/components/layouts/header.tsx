@@ -5,16 +5,13 @@ import { useAuth } from '@/contexts/AuthContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '../shadcn/button'
-import { AuthActions } from '@/apis/auth.actions'
 
 export default function Header() {
-  const { isLogin, checkAuth } = useAuth()
+  const { isLogin } = useAuth()
   const router = useRouter()
 
-  // 로그아웃 기능 추가
-  // const handleLogout = () => {
-  //   AuthActions.logout()
-  //   checkAuth()
+  // const handleLogout = async () => {
+  //   await logout()
   //   router.push('/')
   // }
 
@@ -75,7 +72,7 @@ export default function Header() {
             <Button
               variant='outline'
               onClick={() => router.push('/login')}
-              className='bg-semantic-cta-cta-secondary text-semantic-cta-cta-secondary-text border-none'>
+              className='cursor-pointer bg-semantic-cta-cta-secondary text-semantic-cta-cta-secondary-text border-none'>
               로그인/회원가입
             </Button>
           )}
