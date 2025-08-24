@@ -4,52 +4,36 @@ import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Button } from './shadcn/button'
+import { Button } from '../shadcn/button'
+import { AuthActions } from '@/apis/auth.actions'
 
 export default function Header() {
-  const { isLoggedIn } = useAuth()
+  const { isLogin, checkAuth } = useAuth()
   const router = useRouter()
 
+  // 로그아웃 기능 추가
+  // const handleLogout = () => {
+  //   AuthActions.logout()
+  //   checkAuth()
+  //   router.push('/')
+  // }
+
   const menuItems = [
-    {
-      label: 'ARTIST & PROJECT',
-      src: '/matching',
-    },
-    {
-      label: '엔터프라이즈(기업용)',
-      src: '/company',
-    },
-    {
-      label: '예술가 전환',
-      src: '',
-    },
+    { label: 'ARTIST & PROJECT', href: '/matching' },
+    { label: '엔터프라이즈(기업용)', href: '/company' },
+    { label: '예술가 전환', href: '' },
   ]
 
   const iconItems = [
-    {
-      src: 'message',
-      icon: '/icons/message.svg',
-    },
-    {
-      src: 'notification',
-      icon: '/icons/bell.svg',
-    },
-
-    {
-      src: 'mypage',
-      icon: '/icons/user.svg',
-    },
+    { name: 'message', icon: '/icons/message.svg' },
+    { name: 'notification', icon: '/icons/bell.svg' },
+    { name: 'mypage', icon: '/icons/user.svg' },
   ]
 
   return (
     <header className='w-full bg-white border-b border-gray-200 px-6 py-4'>
       <div className='max-w-[1920px] mx-auto flex items-center justify-between'>
-        <Link
-          href='/'
-          className='flex flex-col cursor-pointer z-99'
-          onClick={() => {
-            router.push('/')
-          }}>
+        <Link href='/' className='flex flex-col cursor-pointer z-99'>
           <Image src='/logo.svg' alt='logo' width={120} height={48} />
         </Link>
 
@@ -57,13 +41,13 @@ export default function Header() {
           {menuItems.map(item => (
             <Link
               key={item.label}
-              href={item.src}
+              href={item.href}
               className='text-[#464A4D] text-sm font-bold transition-colors'>
               {item.label}
             </Link>
           ))}
 
-          {isLoggedIn ? (
+          {isLogin ? (
             <div className='flex items-center space-x-4'>
               <Link
                 href='/artist/profile/setup'
@@ -74,14 +58,12 @@ export default function Header() {
               <div className='ml-12 flex items-center space-x-4'>
                 {iconItems.map(item => (
                   <button
-                    key={item.src}
-                    onClick={() => {
-                      router.push(item.src)
-                    }}
-                    className='rounded-lg cursor-pointer !mr-0 bg-white transition-colors'>
+                    key={item.name}
+                    onClick={() => router.push(item.name)}
+                    className='!mr-0 rounded-lg cursor-pointer bg-white transition-colors'>
                     <Image
                       src={item.icon}
-                      alt={item.src}
+                      alt={item.name}
                       width={48}
                       height={48}
                     />
@@ -90,17 +72,12 @@ export default function Header() {
               </div>
             </div>
           ) : (
-            <div className='flex items-center space-x-3'>
-              <Button
-                variant='outline'
-                size='default'
-                onClick={() => {
-                  router.push('/login')
-                }}
-                className='cursor-pointer bg-semantic-cta-cta-secondary rounded-radius-xs label-s border-none  text-semantic-cta-cta-secondary-text '>
-                로그인/회원가입
-              </Button>
-            </div>
+            <Button
+              variant='outline'
+              onClick={() => router.push('/login')}
+              className='bg-semantic-cta-cta-secondary text-semantic-cta-cta-secondary-text border-none'>
+              로그인/회원가입
+            </Button>
           )}
         </nav>
       </div>
