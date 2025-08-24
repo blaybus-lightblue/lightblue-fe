@@ -108,11 +108,11 @@ function toViewModel(a: any) {
   return { name, job, score, imageSrc, description, region, career, portfolio }
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  const idNum = Number(params.id)
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params)
+  const idNum = Number(id)
   const q = useGetArtistById(idNum, undefined)
 
-  // 🔹 배너 상태 관리
   const [bannerOpen, setBannerOpen] = React.useState(false)
   const hideTimer = React.useRef<number | null>(null)
 
@@ -187,7 +187,6 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        {/* 🔹 제안 배너 */}
         {bannerOpen && (
           <div
             role='status'
