@@ -77,3 +77,5 @@ export const PORTFOLIO_EXISTENCE = [
   },
   { value: false, label: 'X' },
 ]
+
+export const MATCHING_FINISH_DELAY = 1500

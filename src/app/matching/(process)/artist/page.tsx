@@ -4,22 +4,23 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { SelectListModal } from '@/components/modal/SelectListModal'
 import {
   CITIES,
+  MATCHING_FINISH_DELAY,
   PORTFOLIO_EXISTENCE,
-  PROJECT_DURATION,
-  PROJECT_TYPES,
   YEARS_OF_CARRIER,
 } from '@/consts'
 import { ResponseProps } from '@/components/chat/Response'
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Flex } from '@/components/flex'
 import { Chat } from '@/components/chat/Chat'
 import { isEqual, isNil } from 'lodash-es'
+import { LoadingMatching } from '@/components/matching/LoadingMatching'
 
 export default function Page() {
   const [modal, modalCtx] = useModal()
   const [currentResponses, setCurrentResponses] = useState<
     SelectOption['value'][]
   >([])
+  const [isMatching, setIsMatching] = useState(false)
 
   const responses: ResponseProps[] = useMemo(
     () => [
@@ -112,17 +113,32 @@ export default function Page() {
       100
   )
 
+  useEffect(() => {
+    if (
+      currentResponses.length ===
+      responses.filter(item => !isNil(item.buttonProps)).length
+    ) {
+      setTimeout(() => {
+        setIsMatching(true)
+      }, MATCHING_FINISH_DELAY)
+    }
+  }, [currentResponses, responses])
+
+  const onProcess = useCallback((responses: SelectOption[]) => {
+    setCurrentResponses(responses.map(item => item.value))
+  }, [])
+
   return (
     <>
       <Flex gap={24} className='w-full' align='center'>
         <ProgressBar value={percentage} className='h-[22px]' />
         <p className='body1'>{percentage}%</p>
       </Flex>
-      <Chat
-        responses={responses}
-        onProcess={responses => {
-          setCurrentResponses(responses.map(item => item.value))
-        }}></Chat>
+      {isMatching ? (
+        <LoadingMatching />
+      ) : (
+        <Chat responses={responses} onProcess={onProcess} />
+      )}
       {modalCtx}
     </>
   )
