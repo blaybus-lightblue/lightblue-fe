@@ -69,3 +69,11 @@ export const PROJECT_DURATION = [
   { value: { maxDuratoin: 90 }, label: '3개월 이내' },
   { value: { maxDuratoin: MAX_DURATION }, label: '3개월 이상' },
 ]
+
+export const PORTFOLIO_EXISTENCE = [
+  {
+    value: true,
+    label: 'O',
+  },
+  { value: false, label: 'X' },
+]

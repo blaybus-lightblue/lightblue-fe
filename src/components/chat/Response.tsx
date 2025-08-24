@@ -8,6 +8,7 @@ export interface ResponseProps extends ComponentProps<'div'> {
   buttonProps?: {
     onClick: () => Promise<SelectOption | undefined>
     buttonText: string
+    disabled?: boolean
   }
 }
 
@@ -27,6 +28,7 @@ export const Response = ({
       <p className='caption-l'>{text}</p>
       {buttonProps && (
         <Button
+          disabled={buttonProps.disabled}
           variant='default'
           className='w-full rounded-[6px] bg-primitive-color-primary-700 py-[10px] text-white cursor-pointer hover:bg-primitive-color-primary-700'
           onClick={buttonProps.onClick}>
