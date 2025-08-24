@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
-import Footer from '@/components/footer'
+import Footer from '@/components/layouts/footer'
 
 export default function Home() {
   return (

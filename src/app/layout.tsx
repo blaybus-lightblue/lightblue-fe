@@ -4,7 +4,7 @@ import ReactQueryProvider from '@/providers/ReactQueryProvider'
 import { CounterStoreProvider } from '@/providers/CounterStoreProvider'
 import { AuthProvider } from '@/contexts/AuthContext'
 import localFont from 'next/font/local'
-import Header from '@/components/header'
+import Header from '@/components/layouts/header'
 
 const Pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
