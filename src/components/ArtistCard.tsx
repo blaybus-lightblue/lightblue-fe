@@ -1,9 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { Card, CardContent, CardHeader } from '@/components/shadcn/card'
+import { Card, CardContent } from '@/components/shadcn/card'
 import Image from 'next/image'
-import { Checkbox } from '@/components/shadcn/checkbox'
 import Link from 'next/link'
 
 type ArtistCardProps = {
@@ -53,14 +52,14 @@ export const ArtistCard = ({
 
           <div className='absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black from-20% via-black/75 via-40% to-transparent to-100%' />
 
-          <CardHeader
+          {/* <CardHeader
             className='absolute top-2 left-2 z-10 p-0'
             onClick={e => e.stopPropagation()}>
             <label className='flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 shadow-sm cursor-pointer whitespace-nowrap hover:bg-white select-none'>
               <Checkbox className='border-2 data-[state=checked]:bg-[#006FFF] data-[state=checked]:border-[#006FFF]' />
               <span className='text-sm text-gray-500'>비교하기</span>
             </label>
-          </CardHeader>
+          </CardHeader>*/}
 
           <CardContent className='absolute bottom-3 left-3 right-3 z-10 p-0'>
             <div className='flex flex-col pb-2 items-center justify-center text-white select-none'>
