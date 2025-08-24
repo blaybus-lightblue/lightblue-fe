@@ -209,22 +209,7 @@ export interface ProjectDTO {
   updatedAt?: string
 }
 
-export interface Account {
-  /** @format int64 */
-  id?: number
-  username?: string
-  accountType?: string
-  enabled?: boolean
-  authorities?: GrantedAuthority[]
-  accountNonExpired?: boolean
-  accountNonLocked?: boolean
-  credentialsNonExpired?: boolean
-}
-
-export interface Artist {
-  /** @format int64 */
-  id?: number
-  account?: Account
+export interface ArtistUpdateRequest {
   name?: string
   phone?: string
   email?: string
@@ -235,30 +220,57 @@ export interface Artist {
   activityField?: string
   desiredCollaborationField?: string
   introduction?: string
-  portfolios?: Portfolio[]
 }
 
-export interface GrantedAuthority {
-  authority?: string
+export interface ApiResponseArtistDTO {
+  isSuccess?: boolean
+  code?: string
+  message?: string
+  result?: ArtistDTO
 }
 
-export interface Portfolio {
+export interface ArtistDTO {
   /** @format int64 */
   id?: number
-  artist?: Artist
+  /** @format int64 */
+  accountId?: number
+  name?: string
+  phone?: string
+  email?: string
+  /** @format int32 */
+  career?: number
+  jobField?: string
+  activityArea?: string
+  activityField?: string
+  desiredCollaborationField?: string
+  introduction?: string
+  portfolios?: PortfolioDTO[]
+}
+
+export interface PortfolioDTO {
+  /** @format int64 */
+  id?: number
+  /** @format int64 */
+  artistId?: number
   url?: string
-  files?: PortfolioFile[]
+  files?: PortfolioFileDTO[]
 }
 
-export interface PortfolioFile {
+export interface PortfolioFileDTO {
   /** @format int64 */
   id?: number
-  portfolio?: Portfolio
   fileUri?: string
 }
 
 export interface PortfolioRequest {
   url?: string
+}
+
+export interface ApiResponsePortfolioDTO {
+  isSuccess?: boolean
+  code?: string
+  message?: string
+  result?: PortfolioDTO
 }
 
 export interface ProjectCreateRequest {
@@ -378,6 +390,21 @@ export interface LoginRequest {
   password?: string
 }
 
+export interface ArtistCreateRequest {
+  name?: string
+  phone?: string
+  email?: string
+  /** @format int32 */
+  career?: number
+  jobField?: string
+  activityArea?: string
+  activityField?: string
+  desiredCollaborationField?: string
+  introduction?: string
+  /** @format int64 */
+  accountId?: number
+}
+
 export interface ApiResponseListProjectDTO {
   isSuccess?: boolean
   code?: string
@@ -385,17 +412,97 @@ export interface ApiResponseListProjectDTO {
   result?: ProjectDTO[]
 }
 
-export interface ArtistDTO {
-  /** @format int64 */
-  id?: number
-  name?: string
-  portfolios?: PortfolioDTO[]
+export interface Pageable {
+  /**
+   * @format int32
+   * @min 0
+   */
+  page?: number
+  /**
+   * @format int32
+   * @min 1
+   */
+  size?: number
+  sort?: string[]
 }
 
-export interface PortfolioDTO {
+export interface ApiResponsePagePortfolioDTO {
+  isSuccess?: boolean
+  code?: string
+  message?: string
+  result?: PagePortfolioDTO
+}
+
+export interface PagePortfolioDTO {
   /** @format int64 */
-  id?: number
-  url?: string
+  totalElements?: number
+  /** @format int32 */
+  totalPages?: number
+  pageable?: PageableObject
+  first?: boolean
+  /** @format int32 */
+  size?: number
+  content?: PortfolioDTO[]
+  /** @format int32 */
+  number?: number
+  sort?: SortObject[]
+  /** @format int32 */
+  numberOfElements?: number
+  last?: boolean
+  empty?: boolean
+}
+
+export interface PageableObject {
+  paged?: boolean
+  /** @format int32 */
+  pageNumber?: number
+  /** @format int32 */
+  pageSize?: number
+  /** @format int64 */
+  offset?: number
+  sort?: SortObject[]
+  unpaged?: boolean
+}
+
+export interface SortObject {
+  direction?: string
+  nullHandling?: string
+  ascending?: boolean
+  property?: string
+  ignoreCase?: boolean
+}
+
+export interface ApiResponsePageArtistDTO {
+  isSuccess?: boolean
+  code?: string
+  message?: string
+  result?: PageArtistDTO
+}
+
+export interface PageArtistDTO {
+  /** @format int64 */
+  totalElements?: number
+  /** @format int32 */
+  totalPages?: number
+  pageable?: PageableObject
+  first?: boolean
+  /** @format int32 */
+  size?: number
+  content?: ArtistDTO[]
+  /** @format int32 */
+  number?: number
+  sort?: SortObject[]
+  /** @format int32 */
+  numberOfElements?: number
+  last?: boolean
+  empty?: boolean
+}
+
+export interface ApiResponseListPortfolioDTO {
+  isSuccess?: boolean
+  code?: string
+  message?: string
+  result?: PortfolioDTO[]
 }
 
 export interface ApiResponseVoid {
@@ -411,21 +518,15 @@ export type UpdateProjectData = ApiResponseProjectDTO
 
 export type DeleteProjectData = ApiResponseVoid
 
-export type GetPortfolioByIdData = Portfolio
+export type GetArtistByIdData = ApiResponseArtistDTO
 
-export type UpdatePortfolioData = Portfolio
+export type UpdateArtistData = ApiResponseArtistDTO
 
-export type DeletePortfolioData = any
+export type DeleteArtistData = ApiResponseVoid
 
-export type GetArtistByIdData = ArtistDTO
+export type UpdatePortfolioData = ApiResponsePortfolioDTO
 
-export type UpdateArtistData = Artist
-
-export type DeleteArtistData = any
-
-export type UpdatePortfolio1Data = Portfolio
-
-export type DeletePortfolio1Data = any
+export type DeletePortfolioData = ApiResponseVoid
 
 export interface GetAllProjectsParams {
   /**
@@ -448,21 +549,25 @@ export type GetAllProjectsData = ApiResponseListProjectDTO
 
 export type CreateProjectData = ApiResponseProjectDTO
 
-export type GetAllPortfoliosData = Portfolio[]
-
-export type CreatePortfolioData = Portfolio
-
 export type RegisterData = AuthResponse
 
 export type LoginData = AuthResponse
 
-export type GetAllArtistsData = Artist[]
+export interface SearchArtistsParams {
+  activityArea?: string
+  /** @format int32 */
+  career?: number
+  hasPortfolios?: boolean
+  pageable: Pageable
+}
 
-export type CreateArtistData = Artist
+export type SearchArtistsData = ApiResponsePageArtistDTO
 
-export type GetPortfoliosByArtistIdData = PortfolioDTO[]
+export type CreateArtistData = ApiResponseArtistDTO
 
-export type AddPortfolioToArtistData = Portfolio
+export type GetPortfoliosByArtistIdData = ApiResponseListPortfolioDTO
+
+export type AddPortfolioToArtistData = ApiResponsePortfolioDTO
 
 export interface SearchProjectsParams {
   keyword: string
@@ -557,6 +662,12 @@ export interface GetProjectsByArtFieldParams {
 }
 
 export type GetProjectsByArtFieldData = ApiResponseListProjectDTO
+
+export interface GetAllPortfoliosParams {
+  pageable: Pageable
+}
+
+export type GetAllPortfoliosData = ApiResponsePagePortfolioDTO
 
 export type HealthData = string
 
@@ -820,65 +931,11 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 특정 ID를 가진 아티스트의 상세 정보를 조회합니다.
      *
-     * @tags portfolio-controller
-     * @name GetPortfolioById
-     * @request GET:/api/portfolios/{id}
-     * @secure
-     */
-
-    getPortfolioById: (id: number, params: RequestParams = {}) =>
-      this.request<GetPortfolioByIdData, any>({
-        path: `/api/portfolios/${id}`,
-        method: 'GET',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags portfolio-controller
-     * @name UpdatePortfolio
-     * @request PUT:/api/portfolios/{id}
-     * @secure
-     */
-    updatePortfolio: (
-      id: number,
-      data: Portfolio,
-      params: RequestParams = {}
-    ) =>
-      this.request<UpdatePortfolioData, any>({
-        path: `/api/portfolios/${id}`,
-        method: 'PUT',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags portfolio-controller
-     * @name DeletePortfolio
-     * @request DELETE:/api/portfolios/{id}
-     * @secure
-     */
-    deletePortfolio: (id: number, params: RequestParams = {}) =>
-      this.request<DeletePortfolioData, any>({
-        path: `/api/portfolios/${id}`,
-        method: 'DELETE',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags artist-controller
+     * @tags Artist
      * @name GetArtistById
+     * @summary 아티스트 상세 조회
      * @request GET:/api/artists/{id}
      * @secure
      */
@@ -891,14 +948,19 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 기존 아티스트 정보를 수정합니다.
      *
-     * @tags artist-controller
+     * @tags Artist
      * @name UpdateArtist
+     * @summary 아티스트 정보 수정
      * @request PUT:/api/artists/{id}
      * @secure
      */
-    updateArtist: (id: number, data: Artist, params: RequestParams = {}) =>
+    updateArtist: (
+      id: number,
+      data: ArtistUpdateRequest,
+      params: RequestParams = {}
+    ) =>
       this.request<UpdateArtistData, any>({
         path: `/api/artists/${id}`,
         method: 'PUT',
@@ -909,10 +971,11 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 특정 아티스트를 삭제합니다.
      *
-     * @tags artist-controller
+     * @tags Artist
      * @name DeleteArtist
+     * @summary 아티스트 삭제
      * @request DELETE:/api/artists/{id}
      * @secure
      */
@@ -925,14 +988,15 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 특정 아티스트의 포트폴리오를 수정합니다.
      *
-     * @tags artist-controller
-     * @name UpdatePortfolio1
+     * @tags Artist
+     * @name UpdatePortfolio
+     * @summary 아티스트 포트폴리오 수정
      * @request PUT:/api/artists/{artistId}/portfolios/{portfolioId}
      * @secure
      */
-    updatePortfolio1: (
+    updatePortfolio: (
       artistId: number,
       portfolioId: number,
       data: {
@@ -941,7 +1005,7 @@ export class Api<
       },
       params: RequestParams = {}
     ) =>
-      this.request<UpdatePortfolio1Data, any>({
+      this.request<UpdatePortfolioData, any>({
         path: `/api/artists/${artistId}/portfolios/${portfolioId}`,
         method: 'PUT',
         body: data,
@@ -951,19 +1015,20 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 특정 아티스트의 포트폴리오를 삭제합니다.
      *
-     * @tags artist-controller
-     * @name DeletePortfolio1
+     * @tags Artist
+     * @name DeletePortfolio
+     * @summary 아티스트 포트폴리오 삭제
      * @request DELETE:/api/artists/{artistId}/portfolios/{portfolioId}
      * @secure
      */
-    deletePortfolio1: (
+    deletePortfolio: (
       artistId: number,
       portfolioId: number,
       params: RequestParams = {}
     ) =>
-      this.request<DeletePortfolio1Data, any>({
+      this.request<DeletePortfolioData, any>({
         path: `/api/artists/${artistId}/portfolios/${portfolioId}`,
         method: 'DELETE',
         secure: true,
@@ -1008,44 +1073,11 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 새로운 사용자를 등록합니다.
      *
-     * @tags portfolio-controller
-     * @name GetAllPortfolios
-     * @request GET:/api/portfolios
-     * @secure
-     */
-    getAllPortfolios: (params: RequestParams = {}) =>
-      this.request<GetAllPortfoliosData, any>({
-        path: `/api/portfolios`,
-        method: 'GET',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags portfolio-controller
-     * @name CreatePortfolio
-     * @request POST:/api/portfolios
-     * @secure
-     */
-    createPortfolio: (data: Portfolio, params: RequestParams = {}) =>
-      this.request<CreatePortfolioData, any>({
-        path: `/api/portfolios`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags auth-controller
+     * @tags Auth
      * @name Register
+     * @summary 회원가입
      * @request POST:/api/auth/register
      * @secure
      */
@@ -1060,10 +1092,11 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 기존 사용자로 로그인합니다.
      *
-     * @tags auth-controller
+     * @tags Auth
      * @name Login
+     * @summary 로그인
      * @request POST:/api/auth/login
      * @secure
      */
@@ -1078,30 +1111,33 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 활동 분야, 경력, 포트폴리오 유무로 아티스트를 검색합니다.
      *
-     * @tags artist-controller
-     * @name GetAllArtists
+     * @tags Artist
+     * @name SearchArtists
+     * @summary 아티스트 검색
      * @request GET:/api/artists
      * @secure
      */
-    getAllArtists: (params: RequestParams = {}) =>
-      this.request<GetAllArtistsData, any>({
+    searchArtists: (query: SearchArtistsParams, params: RequestParams = {}) =>
+      this.request<SearchArtistsData, any>({
         path: `/api/artists`,
         method: 'GET',
+        query: query,
         secure: true,
         ...params,
       }),
 
     /**
-     * No description
+     * @description 새로운 아티스트를 등록합니다.
      *
-     * @tags artist-controller
+     * @tags Artist
      * @name CreateArtist
+     * @summary 아티스트 생성
      * @request POST:/api/artists
      * @secure
      */
-    createArtist: (data: Artist, params: RequestParams = {}) =>
+    createArtist: (data: ArtistCreateRequest, params: RequestParams = {}) =>
       this.request<CreateArtistData, any>({
         path: `/api/artists`,
         method: 'POST',
@@ -1112,10 +1148,11 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 특정 아티스트의 모든 포트폴리오를 조회합니다.
      *
-     * @tags artist-controller
+     * @tags Artist
      * @name GetPortfoliosByArtistId
+     * @summary 아티스트의 포트폴리오 조회
      * @request GET:/api/artists/{artistId}/portfolios
      * @secure
      */
@@ -1128,10 +1165,11 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description 특정 아티스트에게 새로운 포트폴리오를 추가합니다.
      *
-     * @tags artist-controller
+     * @tags Artist
      * @name AddPortfolioToArtist
+     * @summary 아티스트에게 포트폴리오 추가
      * @request POST:/api/artists/{artistId}/portfolios
      * @secure
      */
@@ -1307,6 +1345,27 @@ export class Api<
     ) =>
       this.request<GetProjectsByArtFieldData, any>({
         path: `/api/projects/filter/art-field`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 모든 포트폴리오를 페이지 기반으로 조회합니다.
+     *
+     * @tags Portfolio
+     * @name GetAllPortfolios
+     * @summary 모든 포트폴리오 조회 (페이지네이션)
+     * @request GET:/api/portfolios
+     * @secure
+     */
+    getAllPortfolios: (
+      query: GetAllPortfoliosParams,
+      params: RequestParams = {}
+    ) =>
+      this.request<GetAllPortfoliosData, any>({
+        path: `/api/portfolios`,
         method: 'GET',
         query: query,
         secure: true,

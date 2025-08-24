@@ -1,12 +1,12 @@
-import { Portfolio, RequestParams } from './fetchers'
+import { GetAllPortfoliosParams, RequestParams } from './fetchers'
 import { api } from './http'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 const queryKeys = {
   all: ['portfolio'] as const,
 
-  getAllPortfolios: (query?: RequestParams) =>
-    [...queryKeys.all, query] as const,
+  getAllPortfolios: (query: GetAllPortfoliosParams, params?: RequestParams) =>
+    [...queryKeys.all, query, params] as const,
 
   getPortfolioById: (id: number, query?: RequestParams) =>
     [...queryKeys.all, id, query] as const,
@@ -16,82 +16,16 @@ const queryKeys = {
 }
 
 export const queryOptions = {
-  getPortfolios: (params?: RequestParams) => ({
-    queryKey: queryKeys.getAllPortfolios(params),
-    queryFn: () => api.getAllPortfolios(params),
-  }),
-
-  getPortfolioById: (id: number, params?: RequestParams) => ({
-    queryKey: queryKeys.getPortfolioById(id, params),
-    queryFn: () => api.getPortfolioById(id, params),
-  }),
-
-  getProtfoliosByArtistId: (artistId: number, params?: RequestParams) => ({
-    queryKeys: queryKeys.getPortfoliosByArtistId(artistId, params),
-    queryFn: () => api.getPortfoliosByArtistId(artistId, params),
-  }),
-
-  updatePortfolio: (
-    id: number,
-    data: Portfolio,
-    params: RequestParams = {}
-  ) => ({
-    mutationFn: () => api.updatePortfolio(id, data, params),
-  }),
-  deletePortfolio: (id: number, params: RequestParams = {}) => ({
-    mutationFn: () => api.deletePortfolio(id, params),
-  }),
-  createPortfolio: (data: Portfolio, params: RequestParams = {}) => ({
-    mutationFn: () => api.createPortfolio(data, params),
+  getPortfolios: (query: GetAllPortfoliosParams, params?: RequestParams) => ({
+    queryKey: queryKeys.getAllPortfolios(query, params),
+    queryFn: () => api.getAllPortfolios(query, params),
   }),
 }
 
 // 모든 포트폴리오 GET
-export function useGetAllPortfolios(params?: RequestParams) {
-  return useQuery(queryOptions.getPortfolios(params))
-}
-
-// 특정 포트폴리오 GET
-export function useGetPortfolioById(id: number, params?: RequestParams) {
-  return useQuery(queryOptions.getPortfolioById(id, params))
-}
-
-// 포트폴리오 수정
-export function useUpdatePortfolio(
-  id: number,
-  data: Portfolio,
+export function useGetAllPortfolios(
+  query: GetAllPortfoliosParams,
   params?: RequestParams
 ) {
-  const queryClient = useQueryClient()
-  const res = useMutation(queryOptions.updatePortfolio(id, data, params))
-
-  if (res.isSuccess) {
-    queryClient.invalidateQueries({ queryKey: queryKeys.all })
-  }
-
-  return res
-}
-
-// 포트폴리오 삭제
-export function useDeletePortfolio(id: number, params?: RequestParams) {
-  const queryClient = useQueryClient()
-  const res = useMutation(queryOptions.deletePortfolio(id, params))
-
-  if (res.isSuccess) {
-    queryClient.invalidateQueries({ queryKey: queryKeys.all })
-  }
-
-  return res
-}
-
-// 포트폴리오 생성
-export function useCreatePortfolio(data: Portfolio, params?: RequestParams) {
-  const queryClient = useQueryClient()
-  const res = useMutation(queryOptions.createPortfolio(data, params))
-
-  if (res.isSuccess) {
-    queryClient.invalidateQueries({ queryKey: queryKeys.all })
-  }
-
-  return res
+  return useQuery(queryOptions.getPortfolios(query, params))
 }
