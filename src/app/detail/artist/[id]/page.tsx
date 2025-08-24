@@ -173,7 +173,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         </div>
 
         <Button className='bg-[#006FFF] hover:bg-white text-white hover:text-[#006FFF] text-xl font-bold px-16 py-7 cursor-pointer'>
-          수락하기
+          제안하기
         </Button>
       </div>
     </div>
