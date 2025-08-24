@@ -108,10 +108,25 @@ function toViewModel(a: any) {
   return { name, job, score, imageSrc, description, region, career, portfolio }
 }
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params)
-  const idNum = Number(id)
+export default function Page({ params }: { params: { id: string } }) {
+  const idNum = Number(params.id)
   const q = useGetArtistById(idNum, undefined)
+
+  // 🔹 배너 상태 관리
+  const [bannerOpen, setBannerOpen] = React.useState(false)
+  const hideTimer = React.useRef<number | null>(null)
+
+  const handlePropose = () => {
+    setBannerOpen(true)
+    if (hideTimer.current) window.clearTimeout(hideTimer.current)
+    hideTimer.current = window.setTimeout(() => setBannerOpen(false), 2500) // 2.5초
+  }
+
+  React.useEffect(() => {
+    return () => {
+      if (hideTimer.current) window.clearTimeout(hideTimer.current)
+    }
+  }, [])
 
   if (q.isLoading)
     return <div className='mx-auto max-w-4xl px-4 pt-10'>불러오는 중...</div>
@@ -172,7 +187,19 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
         </div>
 
-        <Button className='bg-[#006FFF] hover:bg-white text-white hover:text-[#006FFF] text-xl font-bold px-16 py-7 cursor-pointer'>
+        {/* 🔹 제안 배너 */}
+        {bannerOpen && (
+          <div
+            role='status'
+            aria-live='polite'
+            className='fixed bottom-10 w-100 max-w-md text-center rounded-lg bg-black/80 text-white px-4 py-3 shadow-lg'>
+            아티스트에게 제안 했습니다.
+          </div>
+        )}
+
+        <Button
+          onClick={handlePropose}
+          className='bg-[#006FFF] hover:bg-white text-white hover:text-[#006FFF] text-xl font-bold px-16 py-7 cursor-pointer'>
           제안하기
         </Button>
       </div>
