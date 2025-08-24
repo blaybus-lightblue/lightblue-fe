@@ -1,20 +1,27 @@
-import { Artist, RequestParams } from './fetchers'
+import {
+  ArtistCreateRequest,
+  ArtistDTO,
+  ArtistUpdateRequest,
+  RequestParams,
+  SearchArtistsParams,
+} from './fetchers'
 import { api } from './http'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKeys = {
   all: ['artist'] as const,
 
-  getAllArtists: (query?: RequestParams) => [...queryKeys.all, query] as const,
+  searchArtists: (query?: SearchArtistsParams, params?: RequestParams) =>
+    [...queryKeys.all, query, params] as const,
 
   getArtistById: (id: number, query?: RequestParams) =>
     [...queryKeys.all, id, query] as const,
 }
 
 export const queryOptions = {
-  getAllArtists: (params?: RequestParams) => ({
-    queryKey: queryKeys.getAllArtists(params),
-    queryFn: () => api.getAllArtists(params),
+  getAllArtists: (query: SearchArtistsParams, params?: RequestParams) => ({
+    queryKey: queryKeys.searchArtists(query, params),
+    queryFn: () => api.searchArtists(query, params),
   }),
 
   getArtistById: (id: number, params?: RequestParams) => ({
@@ -22,32 +29,40 @@ export const queryOptions = {
     queryFn: () => api.getArtistById(id, params),
   }),
 
-  updateArtist: (id: number, data: Artist, params: RequestParams = {}) => ({
-    mutationFn: () => api.updateArtist(id, data, params),
+  updateArtist: () => ({
+    mutationFn: ({
+      data,
+    }: {
+      data: { id: number; data: ArtistUpdateRequest; params?: RequestParams }
+    }) => api.updateArtist(data.id, data.data, data.params),
   }),
-  deleteArtist: (id: number, params: RequestParams = {}) => ({
-    mutationFn: () => api.deleteArtist(id, params),
+  deleteArtist: () => ({
+    mutationFn: ({ data }: { data: { id: number; params?: RequestParams } }) =>
+      api.deleteArtist(data.id, data.params),
   }),
-  createArtist: (data: Artist, params: RequestParams = {}) => ({
-    mutationFn: () => api.createArtist(data, params),
+  createArtist: () => ({
+    mutationFn: ({
+      data,
+    }: {
+      data: { data: ArtistCreateRequest; params?: RequestParams }
+    }) => api.createArtist(data.data, data.params),
   }),
 }
 
-export function useGetAllArtists(params?: RequestParams) {
-  return useQuery(queryOptions.getAllArtists(params))
+export function useGetAllArtists(
+  query: SearchArtistsParams,
+  params?: RequestParams
+) {
+  return useQuery(queryOptions.getAllArtists(query, params))
 }
 
 export function useGetArtistById(id: number, params?: RequestParams) {
   return useQuery(queryOptions.getArtistById(id, params))
 }
 
-export function useUpdateArtist(
-  id: number,
-  data: Artist,
-  params?: RequestParams
-) {
+export function useUpdateArtist() {
   const queryClient = useQueryClient()
-  const res = useMutation(queryOptions.updateArtist(id, data, params))
+  const res = useMutation(queryOptions.updateArtist())
 
   if (res.isSuccess) {
     queryClient.invalidateQueries({ queryKey: queryKeys.all })
@@ -56,9 +71,9 @@ export function useUpdateArtist(
   return res
 }
 
-export function useDeleteArtist(id: number, params?: RequestParams) {
+export function useDeleteArtist() {
   const queryClient = useQueryClient()
-  const res = useMutation(queryOptions.deleteArtist(id, params))
+  const res = useMutation(queryOptions.deleteArtist())
 
   if (res.isSuccess) {
     queryClient.invalidateQueries({ queryKey: queryKeys.all })
@@ -67,9 +82,9 @@ export function useDeleteArtist(id: number, params?: RequestParams) {
   return res
 }
 
-export function useCreateArtist(data: Artist, params?: RequestParams) {
+export function useCreateArtist() {
   const queryClient = useQueryClient()
-  const res = useMutation(queryOptions.createArtist(data, params))
+  const res = useMutation(queryOptions.createArtist())
 
   if (res.isSuccess) {
     queryClient.invalidateQueries({ queryKey: queryKeys.all })
