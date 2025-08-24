@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios'
 import {
   GetAllProjectsParams,
   GetProjectsByBudgetRangeParams,
@@ -58,20 +57,20 @@ export const queryOptions = {
   }),
 
   matchProject: (
-    city: GetProjectsByCityParams,
-    type: GetProjectsByTypeParams,
+    city: GetProjectsByCityParams['city'],
+    type: GetProjectsByTypeParams['projectType'],
     budget: GetProjectsByBudgetRangeParams,
     options?: Omit<
       UseQueryOptions<{ result: (ProjectDTO & { score: number })[] }>,
       'queryKey' | 'queryFn'
     >
   ) => ({
-    queryKey: queryKeys.matchProject(city, type, budget),
+    queryKey: queryKeys.matchProject({ city }, { projectType: type }, budget),
     queryFn: async () => {
       const res = await Promise.all([
-        api.getProjectsByCity(city),
+        api.getProjectsByCity({ city }),
         api.getProjectsByBudgetRange(budget),
-        api.getProjectsByType(type),
+        api.getProjectsByType({ projectType: type }),
       ])
 
       const scores = new Array(
@@ -137,8 +136,8 @@ export function useSearchProject(
 }
 
 export function useMatchProject(
-  city: GetProjectsByCityParams,
-  type: GetProjectsByTypeParams,
+  city: GetProjectsByCityParams['city'],
+  type: GetProjectsByTypeParams['projectType'],
   budget: GetProjectsByBudgetRangeParams,
   options?: Omit<
     UseQueryOptions<{ result: (ProjectDTO & { score: number })[] }>,

@@ -45,7 +45,7 @@ export const MatchingResultCard = ({
       <Flex
         align='center'
         vertical
-        className='absolute bottom-[24px] w-full translate-x-[-8px]'>
+        className='absolute bottom-[24px] w-[calc(100%-12px)] translate-x-[-8px]'>
         <h2 className='text-white'>{title}</h2>
         <p className='caption-m text-white'>{description}</p>
       </Flex>
