@@ -9,7 +9,8 @@ export default async function Page() {
         className='absolute inset-0 bg-cover bg-center bg-no-repeat z-[-1]'
         style={{
           backgroundImage: "url('/background.svg')",
-        }}></div>
+        }}
+      />
       <Flex
         align='center'
         justify='center'
