@@ -13,8 +13,8 @@ const Pretendard = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'LightBlue - Artist & Project Matching Platform',
-  description: 'Connect artists with projects and opportunities',
+  title: '무브텀 - 예술가와 프로젝트를 연결하는 플랫폼',
+  description: '예술가와 프로젝트를 연결하는 플랫폼',
 }
 
 export default function RootLayout({
