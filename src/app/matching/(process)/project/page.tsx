@@ -37,7 +37,7 @@ export default function Page() {
   const responses: ResponseProps[] = useMemo(
     () => [
       {
-        text: '필터링할 정보를 알려주시면 3개 이상의 프로젝트와 예술가가 매칭되요',
+        text: '필터링할 정보를 알려주시면 3개 이상의 프로젝트와 예술가가 매칭돼요.',
       },
       {
         text: '원하시는 지역을 선택해주세요.',
