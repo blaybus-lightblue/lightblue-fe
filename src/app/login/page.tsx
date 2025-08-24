@@ -136,7 +136,7 @@ export default function LoginPage() {
 
           <Button
             type='submit'
-            className='cursor-pointer w-full h-14 bg-[#006fff] text-white text-lg font-bold rounded-lg transition-all duration-200 shadow-sm disabled:bg-gray-300 disabled:cursor-not-allowed'
+            className=' cursor-pointer w-full h-14 bg-[#006fff] text-white text-md font-bold rounded-lg transition-all duration-200 shadow-sm disabled:bg-gray-300 disabled:cursor-not-allowed'
             disabled={isLoading}>
             로그인
           </Button>
@@ -157,7 +157,7 @@ export default function LoginPage() {
               key={item.name}
               type='button'
               variant='outline'
-              className={`text-sm font-bold relative w-full h-14 border-0 ${item.className} font-medium rounded-lg transition-all duration-200 flex items-center justify-center space-x-3`}>
+              className={`text-md font-bold relative w-full h-14 border-0 ${item.className} font-medium rounded-lg transition-all duration-200 flex items-center justify-center space-x-3`}>
               <Image
                 src={item.icon}
                 alt={item.name}
