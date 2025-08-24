@@ -30,7 +30,7 @@ export default function Home() {
 
           <Button
             size='lg'
-            className='cursor-pointer hover:bg-semantic-cta-cta h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
+            className='cursor-pointer  h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
             <Link href='/matching'>시작하기</Link>
           </Button>
         </div>

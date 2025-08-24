@@ -58,7 +58,7 @@ export default function Header() {
             <Link
               key={item.label}
               href={item.src}
-              className='text-[#464A4D] text-sm font-bold hover:text-blue-600 transition-colors'>
+              className='text-[#464A4D] text-sm font-bold transition-colors'>
               {item.label}
             </Link>
           ))}
@@ -67,7 +67,7 @@ export default function Header() {
             <div className='flex items-center space-x-4'>
               <Link
                 href='/artist/profile/setup'
-                className='text-gray-900 font-medium hover:text-blue-600 transition-colors'>
+                className='text-gray-900 font-medium transition-colors'>
                 예술가 전환
               </Link>
 
@@ -97,7 +97,7 @@ export default function Header() {
                 onClick={() => {
                   router.push('/login')
                 }}
-                className='cursor-pointer bg-semantic-cta-cta-secondary rounded-radius-xs label-s border-none  text-semantic-cta-cta-secondary-text hover:text-semantic-cta-cta-secondary-text hover:bg-semantic-cta-cta-secondary-hover'>
+                className='cursor-pointer bg-semantic-cta-cta-secondary rounded-radius-xs label-s border-none  text-semantic-cta-cta-secondary-text '>
                 로그인/회원가입
               </Button>
             </div>
