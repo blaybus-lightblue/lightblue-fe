@@ -1,5 +1,6 @@
 'use client'
 import { MatchingResultPageTemplate } from '@/components/pageTemplates/MatchingResultPageTemplate'
+import { useGetArtistMatchingScore } from '@/hooks/useGetMatchingScore'
 
 import { useArtistStore } from '@/providers/ArtistMatchingResultProvider'
 import { isNil } from 'lodash-es'
@@ -8,6 +9,7 @@ import { useState } from 'react'
 export default function Page() {
   const { result } = useArtistStore(state => state)
   const [compareList, setCompareList] = useState<number[]>([])
+  const getScore = useGetArtistMatchingScore()
 
   return (
     <MatchingResultPageTemplate>

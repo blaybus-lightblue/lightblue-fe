@@ -34,13 +34,38 @@ export const YEARS_OF_CARRIER = new Array(11)
   })
 
 export const PROJECT_TYPES = [
-  { label: '전시 기획/참여', value: 'EXHIBITION' },
-  { label: '공동 작품 제작', value: 'COLLABORATION' },
-  { label: '워크숍/클래스', value: 'WORKSHOP' },
-  { label: '브랜드 협업', value: 'BRAND_COLLABORATION' },
-  { label: '공간/환경 디자인', value: 'SPACE_DESIGN' },
-  { label: '디지털 콘텐츠', value: 'DIGITAL' },
-  { label: '제품 개발', value: 'PRODUCT_DEVELOPMENT' },
+  {
+    label: '전시 기획/참여 (갤러리, 그룹전, 팝업전시)',
+    value: 'EXHIBITION',
+  },
+  {
+    label: '공동 작품 제작 (콜라보 작품, 융합 예술)',
+    value: 'COLLABORATION',
+  },
+  {
+    label: '워크숍/클래스 (예술 교육, 세정 프로그램)',
+    value: 'WORKSHOP',
+  },
+  {
+    label: '브랜드 협업 (로고, 패키지, 광고 브랜딩)',
+    value: 'COMMERCIAL',
+  },
+  {
+    label: '공연/환경 디자인 (카페, 호텔, 상업공간)',
+    value: 'PERFORMANCE',
+  },
+  {
+    label: '디지털 콘텐츠 (SNS, 웹사이트, 영상)',
+    value: 'DIGITAL',
+  },
+  {
+    label: '제품 개발 (구조 생활용품, 예술상품)',
+    value: 'INSTALLATION',
+  },
+  {
+    label: '기타',
+    value: 'OTHER',
+  },
 ]
 
 export const MIN_BUDGET = 0

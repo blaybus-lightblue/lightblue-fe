@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation'
 export default function Page() {
   const router = useRouter()
   const [modal, modalCtx] = useModal()
-  const { setResult } = useProjectStore(state => state)
+  const { setResult, setCondition } = useProjectStore(state => state)
   const [currentResponses, setCurrentResponses] = useState<
     SelectOption['value'][]
   >([])
@@ -151,7 +151,12 @@ export default function Page() {
 
   useEffect(() => {
     if (!isNil(data?.result) && isSuccess) {
-      setResult(data.result)
+      // setResult(data.result)
+      setCondition(
+        currentResponses?.[0],
+        currentResponses?.[1],
+        currentResponses?.[2]
+      )
       //@TODO 삭제
       setResult([
         {

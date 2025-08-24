@@ -7,6 +7,8 @@ import { MatchingResultCard } from '../matching/MatchingResultCard'
 import { ArtistDTO } from '@/apis/fetchers'
 import { Flex } from '../flex'
 import Image from 'next/image'
+import { useGetArtistMatchingScore } from '@/hooks/useGetMatchingScore'
+import { isEmpty } from 'lodash-es'
 
 export type MatchingComparePageTemplateProps = ComponentProps<'div'>
 
@@ -43,6 +45,7 @@ const ArtistItem = ({
   className?: string
   style?: CSSProperties
 }) => {
+  const getScore = useGetArtistMatchingScore()
   return (
     <Flex vertical align='center' className={className} style={style} gap={20}>
       <MatchingResultCard
@@ -50,6 +53,11 @@ const ArtistItem = ({
         image={artist.portfolios?.[0].url ?? '/1.jpg'}
         title={artist.name}
         description={artist.activityField}
+        score={getScore(
+          artist.activityArea!,
+          artist.career!,
+          !isEmpty(artist.portfolios)
+        )}
       />
       <div>
         <h1 className='text-center'>예술가소개</h1>

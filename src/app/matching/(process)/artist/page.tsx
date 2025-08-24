@@ -21,7 +21,7 @@ import { useArtistStore } from '@/providers/ArtistMatchingResultProvider'
 export default function Page() {
   const router = useRouter()
   const [modal, modalCtx] = useModal()
-  const { setResult } = useArtistStore(state => state)
+  const { setResult, setCondition } = useArtistStore(state => state)
   const [currentResponses, setCurrentResponses] = useState<
     SelectOption['value'][]
   >([])
@@ -30,8 +30,8 @@ export default function Page() {
   const { data, isSuccess } = useGetAllArtists(
     {
       activityArea: currentResponses?.[0],
-      hasPortfolios: currentResponses?.[2],
       career: currentResponses?.[1],
+      hasPortfolios: currentResponses?.[2],
     },
     undefined,
     { enabled: isMatching }
@@ -142,6 +142,11 @@ export default function Page() {
   useEffect(() => {
     if (!isNil(data?.data.result?.content) && isSuccess) {
       // setResult(data.data.result.content)
+      setCondition(
+        currentResponses?.[0],
+        currentResponses?.[1],
+        currentResponses?.[2]
+      )
 
       //@TODO: 삭제
       setResult([
@@ -151,7 +156,7 @@ export default function Page() {
           name: '김서연',
           phone: '010-1234-5678', // 예시 전화번호
           email: 'kimseoyeon@example.com', // 예시 이메일
-          career: 3, // "경력 3년"에서 추출
+          career: 0, // "경력 3년"에서 추출
           jobField: '작가', // 모든 사람이 작가이므로 공통값
           activityArea: '서울', // "서울 기반"에서 추출
           activityField: '인물화', // "인물화 전문"에서 추출

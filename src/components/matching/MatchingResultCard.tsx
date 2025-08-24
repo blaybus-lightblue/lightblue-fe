@@ -11,6 +11,7 @@ export interface MathcingResultCardProps {
   description: ReactNode
   className?: string
   hideCompare?: boolean
+  score: number
 }
 
 export const MatchingResultCard = ({
@@ -21,6 +22,7 @@ export const MatchingResultCard = ({
   description,
   className,
   hideCompare,
+  score,
 }: MathcingResultCardProps) => {
   const id = useId()
   return (
@@ -49,6 +51,10 @@ export const MatchingResultCard = ({
         <h2 className='text-white'>{title}</h2>
         <p className='caption-m text-white'>{description}</p>
       </Flex>
+      <div
+        className={`py-[5px] px-[10px] text-white caption-m absolute right-[10px] bottom-[10px] rounded-[5px] ${score >= 90 ? 'bg-green-300' : score >= 50 ? 'bg-yellow-300' : 'bg-red-300'}`}>
+        {score}점
+      </div>
     </div>
   )
 }
