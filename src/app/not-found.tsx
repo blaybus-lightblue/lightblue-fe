@@ -23,7 +23,7 @@ export default function NotFound() {
         <Button
           size='lg'
           variant='outline'
-          className='font-bold mt-8 button-1 w-[173px] h-14 cursor-pointer  text-semantic-cta-cta border-semantic-cta-cta text-md rounded-lg transition-all duration-200 '>
+          className='font-bold mt-8 button-1  hover:text-semantic-cta-cta w-[173px] h-14 cursor-pointer  text-semantic-cta-cta border-semantic-cta-cta text-md rounded-lg transition-all duration-200 '>
           <Link href='/'>홈으로</Link>
         </Button>
       </div>
