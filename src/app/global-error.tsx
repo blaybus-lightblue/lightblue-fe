@@ -8,7 +8,7 @@ import Image from 'next/image'
 export default function GlobalError() {
   return (
     <div className='h-full flex flex-col'>
-      <div className='min-h-[calc(100vh-197px)]  space-y-4 flex flex-col items-center justify-center relative overflow-hidden'>
+      <div className='h-full flex-1 space-y-4 flex flex-col items-center justify-center relative overflow-hidden'>
         <div className='relative inline-block'>
           <Image src='/icons/505.svg' alt='505' width={160} height={161} />
         </div>

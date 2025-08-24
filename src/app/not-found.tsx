@@ -6,7 +6,7 @@ import Footer from '@/components/footer'
 export default function NotFound() {
   return (
     <div className='h-full flex flex-col'>
-      <div className='min-h-[calc(100vh-197px)]  space-y-4 flex flex-col items-center justify-center relative overflow-hidden'>
+      <div className='h-full flex-1 space-y-4 flex flex-col items-center justify-center relative overflow-hidden'>
         <div className='relative inline-block'>
           <Image src='/icons/404.svg' alt='404' width={160} height={161} />
         </div>

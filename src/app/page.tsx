@@ -6,7 +6,7 @@ import Footer from '@/components/footer'
 export default function Home() {
   return (
     <div className='h-full flex flex-col'>
-      <main className='min-h-[calc(100vh-197px)] flex-1 flex items-center justify-center relative '>
+      <main className='h-full flex-1 flex items-center justify-center relative '>
         <div
           className='absolute inset-0 bg-cover bg-center bg-no-repeat'
           style={{
