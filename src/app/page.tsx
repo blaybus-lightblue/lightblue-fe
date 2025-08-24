@@ -1,90 +1,42 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Link from 'next/link'
+import { Button } from '@/components/shadcn/button'
+import { Badge } from '@/components/shadcn/badge'
+import Footer from '@/components/footer'
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src='/next.svg'
-          alt='Next.js logo'
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className='h-full flex flex-col'>
+      <main className='min-h-[calc(100vh-197px)] flex-1 flex items-center justify-center relative '>
+        <div
+          className='absolute inset-0 bg-cover bg-center bg-no-repeat'
+          style={{
+            backgroundImage: "url('/background.svg')",
+          }}></div>
+        <div className='z-10 space-y-4 text-center px-6 max-w-4xl mx-auto'>
+          <Badge
+            variant='secondary'
+            className='body-1 text-md px-m h-12 !leading-[1.8] w-[92px] bg-transparent backdrop-blur-sm text-semantic-brand-primary border-semantic-brand-primary rounded-full border  '>
+            ABOUT
+          </Badge>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'>
-            <Image
-              className={styles.logo}
-              src='/vercel.svg'
-              alt='Vercel logomark'
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-            className={styles.secondary}>
-            Read our docs
-          </a>
+          <h2 className=' headline-l text-semantic-text-text-1 mb-6 leading-tight'>
+            잠재된 능력을 <br /> 무브텀에서 펼쳐보세요
+          </h2>
+
+          <p className='label-m text-semantic-text-text-2 mb-12 max-w-2xl mx-auto leading-relaxed'>
+            매칭시스템으로 빠르게 예술가와 프로젝트를 컨택하여 수익창출을
+            해보세요.
+          </p>
+
+          <Button
+            size='lg'
+            className='cursor-pointer hover:bg-semantic-cta-cta h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
+            <Link href='/matching'>시작하기</Link>
+          </Button>
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'>
-          <Image
-            aria-hidden
-            src='/file.svg'
-            alt='File icon'
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'>
-          <Image
-            aria-hidden
-            src='/window.svg'
-            alt='Window icon'
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href='https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'>
-          <Image
-            aria-hidden
-            src='/globe.svg'
-            alt='Globe icon'
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <Footer />
     </div>
   )
 }
