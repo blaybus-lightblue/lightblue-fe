@@ -18,7 +18,7 @@ export default function MatchingSelectPage() {
         </h2>
         <Flex justify='space-between' gap={31}>
           <SelectCard
-            href='/matching/project'
+            href='/matching/create'
             image='/matching_add.svg'
             title='프로젝트를 생성할래요'
             badgeText='예술가와 협업할 수 있는'
