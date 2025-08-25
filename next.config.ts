@@ -2,6 +2,17 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  // 이미지 도메인 설정 추가
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+        port: '',
+        pathname: '/lightblue-bucket/**',
+      },
+    ],
+  },
   // TurboPack 설정
   experimental: {
     turbo: {

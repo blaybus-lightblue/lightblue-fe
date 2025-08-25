@@ -14,8 +14,8 @@ export default function Home() {
           }}></div>
         <div className='z-10 space-y-4 text-center px-6 max-w-4xl mx-auto'>
           <Badge
-            variant='secondary'
-            className='body-1 text-md px-m h-12 !leading-[1.8] w-[92px] bg-transparent backdrop-blur-sm text-semantic-brand-primary border-semantic-brand-primary rounded-full border  '>
+            variant='outline'
+            className='mb-6 body-1 text-md px-m w-[92px] bg-transparent backdrop-blur-sm text-semantic-brand-primary border-semantic-brand-primary rounded-full border !h-12'>
             ABOUT
           </Badge>
 
@@ -31,7 +31,7 @@ export default function Home() {
           <Button
             size='lg'
             className='cursor-pointer  h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
-            <Link href='/matching'>시작하기</Link>
+            <Link href='/matching/select'>시작하기</Link>
           </Button>
         </div>
       </main>
