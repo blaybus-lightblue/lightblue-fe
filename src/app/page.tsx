@@ -1,9 +1,14 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import Footer from '@/components/layouts/footer'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
+
   return (
     <div className='h-full flex flex-col'>
       <main className='h-full flex-1 flex items-center justify-center relative '>
@@ -30,8 +35,11 @@ export default function Home() {
 
           <Button
             size='lg'
+            onClick={() => {
+              router.push('/matching/select')
+            }}
             className='cursor-pointer  h-14 button-1 bg-semantic-cta-cta text-white px-12 py-4 text-md font-bold rounded-lg transition-all duration-200 '>
-            <Link href='/matching/select'>시작하기</Link>
+            시작하기
           </Button>
         </div>
       </main>
