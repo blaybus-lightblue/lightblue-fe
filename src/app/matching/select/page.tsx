@@ -25,7 +25,7 @@ export default function MatchingSelectPage() {
             type='add'
           />
           <SelectCard
-            href='/matching/ai'
+            href='/matching'
             image='/matching_ai.svg'
             title='AI매칭 할래요'
             badgeText='예술가 & 프로젝트'
