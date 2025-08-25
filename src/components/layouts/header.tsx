@@ -16,7 +16,7 @@ export default function Header() {
   // }
 
   const menuItems = [
-    { label: 'ARTIST & PROJECT', href: '/matching' },
+    { label: 'ARTIST & PROJECT', href: '/explore' },
     { label: '엔터프라이즈(기업용)', href: '/company' },
     { label: '예술가 전환', href: '/artist/profile/setup' },
   ]
