@@ -250,17 +250,40 @@ export default function Page() {
   }, [])
 
   return (
-    <>
-      <Flex gap={24} className='w-full' align='center'>
-        <ProgressBar value={percentage} className='h-[22px]' />
-        <p className='body1'>{percentage}%</p>
-      </Flex>
-      {isMatching ? (
-        <LoadingMatching />
-      ) : (
-        <Chat responses={responses} onProcess={onProcess} />
-      )}
+    <div className='w-full max-w-4xl mx-auto px-6 py-8'>
+      {/* 헤더 섹션 */}
+      <div className='mb-8'>
+        <h1 className='text-2xl font-bold text-gray-900 mb-2'>예술가 매칭</h1>
+        <p className='text-gray-600'>
+          원하시는 조건을 선택해주시면 최적의 예술가를 찾아드립니다
+        </p>
+      </div>
+
+      {/* 진행률 섹션 */}
+      <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8'>
+        <div className='flex items-center justify-between mb-4'>
+          <h2 className='text-lg font-semibold text-gray-800'>진행 상황</h2>
+          <span className='text-2xl font-bold text-blue-600'>
+            {percentage}%
+          </span>
+        </div>
+        <ProgressBar value={percentage} className='h-3' />
+        <div className='mt-3 text-sm text-gray-500'>
+          {currentResponses.length} /{' '}
+          {responses.filter(item => !isNil(item.buttonProps)).length} 단계 완료
+        </div>
+      </div>
+
+      {/* 채팅 섹션 */}
+      <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-6'>
+        {isMatching ? (
+          <LoadingMatching />
+        ) : (
+          <Chat responses={responses} onProcess={onProcess} />
+        )}
+      </div>
+
       {modalCtx}
-    </>
+    </div>
   )
 }
